@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/zhengjy-demo.iml" filepath="$PROJECT_DIR$/zhengjy-demo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/zhengjy-demo-api/zhengjy-demo-api.iml" filepath="$PROJECT_DIR$/zhengjy-demo-api/zhengjy-demo-api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/zhengjy-demo-biz/zhengjy-demo-biz.iml" filepath="$PROJECT_DIR$/zhengjy-demo-biz/zhengjy-demo-biz.iml" />
+      <module fileurl="file://$PROJECT_DIR$/zhengjy-demo-common/zhengjy-demo-common.iml" filepath="$PROJECT_DIR$/zhengjy-demo-common/zhengjy-demo-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/zhengjy-demo-deploy/zhengjy-demo-deploy.iml" filepath="$PROJECT_DIR$/zhengjy-demo-deploy/zhengjy-demo-deploy.iml" />
+    </modules>
+  </component>
+</project>
