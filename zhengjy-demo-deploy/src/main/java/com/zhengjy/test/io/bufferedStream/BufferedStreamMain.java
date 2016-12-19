@@ -1,6 +1,6 @@
 package com.zhengjy.test.io.bufferedStream;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.*;
 
