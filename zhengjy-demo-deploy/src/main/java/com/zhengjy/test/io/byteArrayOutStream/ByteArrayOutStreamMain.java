@@ -1,6 +1,6 @@
 package com.zhengjy.test.io.byteArrayOutStream;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 
 public class ByteArrayOutStreamMain {

@@ -1,6 +1,6 @@
 package com.zhengjy.test.sort;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 public class Test1 {
 	Integer[] arr ={1,34,6,7};

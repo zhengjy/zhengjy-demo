@@ -1,7 +1,7 @@
 package com.zhengjy.test.io.byteArrayInputStream;
 
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 public class ByteArrayInputStreamMain {
 	ByteArrayInputStreamTest bais = new ByteArrayInputStreamTest(ArrayLetters);
@@ -9,7 +9,7 @@ public class ByteArrayInputStreamMain {
 	private static final byte[] ArrayLetters = {
         1,23,5,6,7,8,9
     };
-		@org.junit.jupiter.api.Test
+		@org.junit.Test
 		public void test1(){
 			for(int i=0;i<ArrayLetters.length;i++){
 				int temp = bais.read();

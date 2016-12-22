@@ -1,7 +1,7 @@
 package com.zhengjy.test.design.singleton;
 
 public class Test {
-	@org.junit.jupiter.api.Test
+	@org.junit.Test
 	public void test01(){
 		for(int i=0;i<5;i++){
 			new Thread(new Runnable() {

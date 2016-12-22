@@ -1,6 +1,6 @@
 package com.zhengjy.test.concurrent.executorService;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 import java.util.HashSet;
 import java.util.List;

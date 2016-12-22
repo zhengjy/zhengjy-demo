@@ -99,10 +99,25 @@ HTTP:是Hyper Text Transfer Protocol(超文本传输)的缩写
 		
 		
 		
+Spring
+	1.容器启动阶段：Spring提供了两种方式的BeanDefinition解析器，PropertiesBeanDifinitionReader和XmlBeanDefinitionReader（org.xml.sax包）解析器，也可以自定义自己的解析器，他们
+	都实现了BeanDefinitionReader。加载配置进行解析分析，并将分析后的信息编组为相应的BeanDefinition,注册到相应的BeanDifinitionRegister，存
+	放到beanDefinitionMap(key为beanName,value为BeanDefinition)
+		1)加载配置
+		2)分析配置信息
+		3)装备到BeanDefinition
+		4)其他后处理
+	2.容器实例化阶段：BeanDefinition注册到了BeanDefinitionRegister中之后，当某个请求通过容器的geBean方法明确的请求某个对象，容器会检查所请求的对象是否已经初始化。
+	如果没有，则会根据注册的BeanDefinition所提供的信息实例化请求对象，并未其注入依赖。如果该对象实现了某些回调接口，也会根据回调接口的要求来装配他。当该对象装配完成
+	后，容器会立即返回请求方使用。(如果装载A，会先装载A的父类。)
+		1)实例化对象
+		2)装配依赖
+		3)生命周期的回调
+		4)对象其他处理
+		5)注册回调接口
 		
-		
-		
-		
+	BeanFactoryPosProcessor：容器扩展机制。该机制允许我们在容器实例化对象之前，对注册容器的BeanDefinition所保存的信息做修改。比如修改bean定义的某些属性、增加其他信息
+	如果要自定义需要实现这个接口。
 		
 		
 		
