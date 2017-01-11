@@ -12,5 +12,5 @@
 
     <!-- 设置使用注解的类所在的jar包 -->
     <context:component-scan base-package="com.zhengjy"/>
-    <bean id="fooBar" class="com.zhengjy.spring.news.FooBar"></bean>
+    <bean id="fooBar" name="x1,x2,x3"  class="com.zhengjy.spring.news.FooBar"></bean>
 </beans>

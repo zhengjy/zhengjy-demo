@@ -100,6 +100,9 @@ HTTP:是Hyper Text Transfer Protocol(超文本传输)的缩写
 		
 		
 Spring
+	bean 是在什么时候被创建的，有哪些规则？
+		容器初始化的时候会预先对单例和非延迟加载的对象进行预先初始化。其他的都是延迟加载是在第一次调用getBean 的时候被创建。
+
 	1.容器启动阶段：Spring提供了两种方式的BeanDefinition解析器，PropertiesBeanDefinitionReader和XmlBeanDefinitionReader（org.xml.sax包）解析器，也可以自定义自己的解析器，他们
 	都实现了BeanDefinitionReader。加载配置进行解析分析，并将分析后的信息编组为相应的BeanDefinition,注册到相应的BeanDifinitionRegister，存
 	放到beanDefinitionMap(key为beanName,value为BeanDefinition)
@@ -129,13 +132,78 @@ Spring
 	使用的是加入横切逻辑代理对象，而不是真正的目标对象。如果目标对象没有实现任何接口，Spring AOP 会使用CGLIB(基于类的代理)
 	
 		
+	Spring MVC:当我们对SpringMVC控制的资源发起请求时,这些请求都会被SpringMVC的DispatcherServlet处理，通过BeanNameUrlHandlerMapping找到对应的Controller，然后拿到这个
+	Controller和每个adapter进行适配，找到SimpleControllerHandlerAdapter来完成对应请求的Controller的handlerRequest方法调度，然后就顺利的执行了我们想要的方法。方法
+	会返回一个ModelAndView对象。在获得ModelAndView对象之后，Spring就需要把该View渲染给用户。在这个渲染的过程中，发挥作用的就是ViewResolver和View。当Handler返回
+	ModelAndView中不包含真正的视图，只返回一个逻辑视图名称，ViewResolver就会把改视图名称解析为真正的视图View对象。View是真正进行视图渲染，把结果返回给浏览器的。
+	
+	Spring MVC 5大角色：HandlerMapping、Controller、ModelAndView、ViewResolver、View。
+		 视图:
+			Spring为我们提供了非常多的视图解析器。有一个AbstractCachingViewResolver抽象类，这种视图解析器会把曾经解析的视图保存下来，然后每次解析视图的时候先从缓存
+		里面找，找到了对应的视图就直接返回，如果没有找到就创建一个新的视图对象。然后把他放到一个用于缓存的map中，接着再把新建的视图返回。这种可以降低性能。比较常用
+		的InternalResourceViewResolver是使用比较广泛的视图解析器。InternalResourceViewResolver会把返回的视图名称解析为InternalResourceView对象，InternalResourceView
+		会把Controller处理器方法返回的模型属性都放到对应的request属性中，然后通过RequestDispatcher在服务器端转发或重定向目标URL。
+		
+		获取Handler：(找到Controller)
+		getHandler，通过遍历所有已经注册过的HandlerMapping来找到对应的Handler，然后构建出一个HandlerExecutionChain，
+		他包含了handler和HandlerMaping本身的一些拦截器。
+	
+		HandlerMapping的getHandler实现：有一个getHandlerInternal(request)是个抽象方法，由具体的HandlerMapping
+		来实现，获取到的handler如果为null，则取默认的handler。如果handler为String类型则去容器里面找这样名称的bean.
+		
+		BeanNameUrlHandlerMapping的getHandlerInternal(request)的具体实现,bean的name必须以/开头，他才处理，将信息存储到map中。
+		
+		获取HandlerAdapter：(找到Controller下的方法)
+			同Handler遍历所有已经注册到容器的HandlerAdapter，找到HandlerAdapter。验证是否已实现了HandlerRequestHandler接口
+			若已实现该接口则调用匹配到适配器的实现类下handle方法，执行逻辑。
+
+		初始化HandlerMapping和HandlerAdapter：
+			首先会判断delectAllHandlerMappings是否为true,如果为true，则会去本工程mvc-servlet.xml文件去探测所有实现
+			了HandlerMapping的bean，如果有，则加入DispatcherServlet的HandlerMapprings集合中。如果delectAllHandlerMappings
+			为false，则直接去容器中找id="handlerMapping"且实现了HandlerMappingg的bean，如果都没找到，则会去加载默认
+			的HandlerMapping，会去读取DispatcherServlet.properties文件，里面有默认的BeanNameUrlHandlerMapping、
+			HttpRequestHanderAdapter。
+		
+		HandlerMapping将会通过返回HandlerExecutionChain返回一个Controoler用于具体web请求的处理。可以不只是Controller
+		一种类型。在Spring MVC中任何用于web请求处理的处理对象统称handler。Controller是Handler的一种特殊类型。HandlerMapping
+		通过HandlerExecutionChain返回的一个Object类型的Handler对象，而并没有限制只能是Controller类型。
+
+		HandlerExecutionChain就是一个数据载体，他包含了两方面的数据，一个用于处理Web请求的Handler,另一个则是一组
+		随同Handler一起返回的HandlerInterceptor。这组HandlerInterceptor可以在Handler的执行前后对处理流程拦截操作。
 		
 		
+		HandlerInterceptor:
+		preHandle():该拦截方法将在相应的HandlerAdapter调用具体的Handler处理web请求之前执行。通过boolean判断
+		是否往下执行。true，表明允许后继处理流程继续执行。false：不允许继续往下执行。
+		postHandle():该拦截方法的执行时机为HandlerAdapter调用具体的Handler处理完web请求之后，并且在视图的解析
+		和渲染之前。通过该方法我们可以获取Handler执行后的结果，即ModelAndView。我们可以在原处理结果的基础上对
+		其进行进一步的处理，比如添加新的模型数据。返回为void，不可阻断后续处理。
+		afterCompletion():在框架内整个流程处理完后，或者视图都渲染完了的时候，不管是否发生异常，都会执行。
 		
 		
+		Filter位于DispatcherServlet之前。如果把Filter和HandlerInterceptor看作同一类型的拦截器，Filter将比HanlderInterceptor
+		拥有更高的执行优先级。
+		filter在servlet层面对DispatcherServlet进行拦截，而HandlerInterceptor则位于DispatcherServlet内部，对Handler
+		的执行进行拦截。Filter的应用的位置注定了它不能提供细粒度的拦截时点。通常情况下，使用Filter对应web应用程序
+		中的一些普遍关注点进行统一处理是比较合适的，一旦需要细化处理流程的拦截逻辑，则用HandlerInterceptor。
+
+		Filter是servlet标准组件，需要在xml配置，其生命周期管理更多是由web容器进行管理的。
 		
+		文件上传与MultipartResolver
+		html页面表单最初采用的是application/x-www-form-urlencoded编码方法，并不足以满足文件上传的需要，所以，RFC
+		在基础上新增了multipart/form-data编码的方式以支持基于表单提交的方式支持文件上传。客户端浏览器将按照
+		RFC1867所规定的格式，对提交的表单内容进行编码，服务器只需要根据RFC1867规定的格式对请求中的信息进行解码，
+		就可以获得客户端表单提交的内容，包括上传的文件。
 		
-		
+		MultipartResolver简单分析：
+			当web请求到达DispatcherServlet并等候处理的时候，DispatcherServlet首先会去检查能否从自己的WebApplicationContext
+		中找到一个名称为multipartResolver的MultipartResolver实例。如果能够获得一个实例，DispatcherServlet将通过
+		MultipartResolver的isMultipart(request)方法检查当前web请求是否为multipart类型。如果是DispatcherServlet将调用
+		MultipartResolver的resolverMultipart(request)方法，并返回MultipartHttpServletRequest供后继处理流程使用，否则
+		直接返回HttpServlectRequest。当web类型为multipart的时候，MultipartResolver的resolverMultipart(request)所返回
+		的MultipartHttpServlectRequest将被后继处理流程所依赖的HttpServletRequest而使用。也就是说对应的HttpServletRequest
+		会被替换为MultipartHttpServletRequest，后续的处理的各个环节都是MultipartHttpServletRequest。
+		MultipartResolver接口SpringMVC提供了两个可用的实现类。CommonsMultipartResolver、CosMultipartResolver	
 		
 		
 		

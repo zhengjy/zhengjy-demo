@@ -11,6 +11,8 @@ import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 
 /**
@@ -66,5 +68,12 @@ public class SpringTest {
         userInterface.setPropertyValues(propertyValues);
 
         return (BeanFactory) registry;
+    }
+
+
+    @Test
+    private  void  testSpring(){
+        ApplicationContext a = new ClassPathXmlApplicationContext("spring/spring-config.xml");
+        a.getBean("");
     }
 }

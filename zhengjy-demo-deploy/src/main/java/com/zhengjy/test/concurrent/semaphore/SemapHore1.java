@@ -43,7 +43,7 @@ public class SemapHore1 extends Thread{
 	}
 	
 	/*
-	 * 这里是一个实际的情况，大家排队上厕所，厕所只有两个位置，来了10个人需要排队。
+	 * 这里是一个实际的情况，大家排队上厕所，厕所只有两个位置，来了10个人需要排队。1
 	 */
 	public static void main(String[] args) {
 		ExecutorService executor  = Executors.newCachedThreadPool();
