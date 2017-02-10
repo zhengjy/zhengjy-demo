@@ -5,12 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9a2d10f2-6303-4b7c-a4d5-20aba2894c14" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/zhengjy-demo-deploy/src/main/java/com/zhengjy/spring/SpringTest2.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/zhengjy-demo-deploy/src/main/java/com/zhengjy/spring/SpringTest.java" afterPath="$PROJECT_DIR$/zhengjy-demo-deploy/src/main/java/com/zhengjy/spring/SpringTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/zhengjy-demo-deploy/src/main/java/com/zhengjy/test/concurrent/semaphore/SemapHore1.java" afterPath="$PROJECT_DIR$/zhengjy-demo-deploy/src/main/java/com/zhengjy/test/concurrent/semaphore/SemapHore1.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/zhengjy-demo-deploy/src/main/resources/file/其他笔记.txt" afterPath="$PROJECT_DIR$/zhengjy-demo-deploy/src/main/resources/file/其他笔记.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/zhengjy-demo-deploy/src/main/resources/spring/spring-config.xml" afterPath="$PROJECT_DIR$/zhengjy-demo-deploy/src/main/resources/spring/spring-config.xml" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <ignored path="$PROJECT_DIR$/zhengjy-demo-api/target/" />
@@ -63,8 +58,8 @@
       <file leaf-file-name="SemapHore1.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/zhengjy-demo-deploy/src/main/java/com/zhengjy/test/concurrent/semaphore/SemapHore1.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="403">
-              <caret line="45" column="47" lean-forward="false" selection-start-line="45" selection-start-column="47" selection-end-line="45" selection-end-column="47" />
+            <state relative-caret-position="676">
+              <caret line="43" column="4" lean-forward="false" selection-start-line="43" selection-start-column="4" selection-end-line="43" selection-end-column="4" />
               <folding />
             </state>
           </provider>
@@ -1267,7 +1262,7 @@
       <workItem from="1482927546651" duration="4649000" />
       <workItem from="1483407739385" duration="4755000" />
       <workItem from="1483663919448" duration="7211000" />
-      <workItem from="1484033280092" duration="1942000" />
+      <workItem from="1484033280092" duration="2587000" />
     </task>
     <task id="LOCAL-00001" summary="e">
       <created>1482148328482</created>
@@ -1290,7 +1285,14 @@
       <option name="project" value="LOCAL" />
       <updated>1482458812971</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="e">
+      <created>1484096565792</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1484096565792</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -1302,7 +1304,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="74450000" />
+    <option name="totallyTimeSpent" value="75095000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="2" y="0" width="1918" height="1040" extended-state="0" />
@@ -1826,8 +1828,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/zhengjy-demo-deploy/src/main/java/com/zhengjy/test/concurrent/semaphore/SemapHore1.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="403">
-          <caret line="45" column="47" lean-forward="false" selection-start-line="45" selection-start-column="47" selection-end-line="45" selection-end-column="47" />
+        <state relative-caret-position="676">
+          <caret line="43" column="4" lean-forward="false" selection-start-line="43" selection-start-column="4" selection-end-line="43" selection-end-column="4" />
           <folding />
         </state>
       </provider>

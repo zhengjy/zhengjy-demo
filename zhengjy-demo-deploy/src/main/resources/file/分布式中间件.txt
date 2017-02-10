@@ -1,0 +1,13 @@
+kafka:
+	kafka是一种分布式的，基于发布/订阅的消息系统。kafka对消息保存时根据Topic进行分类，发送消息者成为Producer，消息接受者为Consumer，此为kafka集群有多个kafka实例组成，
+	每个实例(server)成为broker,无论是kafka集群，还是producer和consumer都依赖zookeeper来保证系统可用性集群保存一些meta信息。
+		主要设计目标为：
+		1)以时间复杂度为O(1)的方式提供消息持久化功能，即使对TB以上的数据也能保证常数(数值不变的常量)时间复杂度的访问
+		2)高吞吐率，即使在非常廉价的机器也能做到单机支持每秒100K条以上消息传输
+		3)支持kafka Server间的消息分区，及分布式消费，同时保证每个Partition内的消息顺序传输
+		4)同时支持离线数据处理和实时数据处理
+	
+	topics：每条发布到Kafka集群的消息都有一个类别，这个类别被称为Topic。一个topics可以认为是一类消息，每个topics将被分为多个partition(区),
+	每个partition在存储层面是append log文件。任何发布到此parition的消息都会被直接追加到log文件
+	的尾部，每条消息在文件中的位置成为offset(偏移量),offset为一个long型数字，他是唯一标记一条信息。kafka并没有提供其他额外的索引机制来存储offset,因为kafka中几乎不允许
+	对消息进行”随机读写“.

@@ -1,0 +1,220 @@
+
+dubbo远程调用协议：
+	REST(HTTP+JSON/XML) 性能高
+	RPS(TCP+Hessian 2进制序列化) 默认
+	
+dubbo节点：
+	Provider：暴露服务的服务提供方。
+	Consumer：调用远程服务的服务消费方。
+	Register：服务注册与发现的注册中心。
+	Monitor：统计服务调用次调和调用时间的监控中心。
+	Container：服务运行容器。
+	
+dubbo调用关系：
+	1、服务器启动容器负责启动、加载、运行服务提供者。
+	2、服务提供者在启动时，向注册中心注册自己提供的服务。
+	3、服务消费者在启动时，向注册中心订阅自己所需的服务。
+	4、注册中心返回提供者地址列表给消费者，如有变更，注册中心将基于长连接推送变更数据给消费者。
+	5、服务消费者，从提供者地址列表中，基于软件负载均衡算法，选一台提供者进行调用，如果调用失败，在调用另一台调用。
+	6、服务消费者和提供者，在内存中累计调用次数和调用时间，定时每分钟发送一次统计数据到监控中心。
+	服务提供方发布服务到服务注册中心
+	服务消费方从服务注册中心订阅服务
+	服务消费方调用已注册的可用服务
+
+dubbo应用执行流程：
+	1、服务提供者启动，根据协议信息绑定到配置的IP和端口上，如果已有服务绑定相同的IP和端口则跳过
+	2、注册服务信息至注册中心
+	3、客户端启动，根据接口和协议信息订阅注册中心订阅中注册的服务，注册中心将存活的服务地址通知到客户端，当有服务信息变更时客户端可以通过定时
+通知得到变更信息
+	4、在客户端需要调用服务时，从内存中拿到上次通知的所有存活地址，根据路由信息和负载均衡选择最终调用的服务地址，发起调用
+	5、通过filter分别在客户端发送请求前和服务端收到请求后，通过异步记录一些需要的信息传递到monitor做监控
+
+dubbo负载均衡：
+	1、Random,随机,按权重配置随机访问概率，调用量越大分配越均匀，默认是这种方式。
+	2、RoundRobin，轮询，按权重设置轮询比例，如果存在较慢的机器容易在这台机器的请求阻塞越多
+	3、LeastActive，最少活跃调用数，不支持权重，只能根据自动识别的活跃数分配，不能灵活调配
+	4、ConsistentHash，一致性hash,对相同参数的请求路由到一个服务提供者上，如果有类似灰度发布需求可采用
+	dubbo的负载均衡机制是在客户端调用时通过内存中的服务信息及配置的负载均衡策略选择，如果对自己的系统没有一个全面的认知，建议采用默认random
+	
+dubbo过滤器：
+
+
+1、注册标签解析器（自定义的dubbo标签），生成对应的BeanDefinition交给spring管理
+2、验证所需要的组件是否已经准备好如(consumer、provider)
+
+
+NIO:
+	NIO和IO的工作方式：
+		IO：基于字节字符流进行操作。
+		NIO：基于管道(channel)和缓冲区(buffer)进行操作，数据总是从通道读取到缓冲区，或者从缓冲区写入到通道。
+	异步IO：NIO可以异步的使用IO，例如：当线程从通道读取数据到缓冲区时，线程还是可以进行其他事情。当数据被写入到缓冲区，线程可以继续出来它。
+	Selects(选择器)：NIO引入选择器的概念，选择器可以用于监听多个通道的事件。因此单个的线程可以监听多个数据通道。
+	
+	面向流与面向缓冲：NIO和IO之间最大的区别是，IO是面向流，NIO是面向缓冲区的。
+		JAVA IO面向流意味着每次从流中读取一个或多个字节，直至读取所有字节，它们没有被缓存在任何地方。此外，它们不能前后移动流中的数据。
+	如果需要前后移动从流中读取的数据，需要先将它缓存在一个缓冲区。
+		JAVA NIO的缓冲导向方法略有不同。数据读取一个它稍后处理的缓冲区，需要时可在缓冲区前后移动。这增加了处理过程中的灵活性。但是，
+	还需要先检查是否缓冲区中包含所有处理的数据。而且，需确保当更多的数据读入缓冲区时，不用覆盖缓冲区尚未处理的数据。
+	
+	阻塞IO与非阻塞IO：
+		JAVA IO的各种流是阻塞的。当调用read()或write()时，该线程被阻塞，直到有一些数据被读取，或数据完全写入。该线程不能干是他的事情。
+		JAVA NIO的非阻塞模式，使用一个线程从某通道发送请求读取数据，但是它仅能得到目前可用的数据，如果目前没有可用的数据时，就什么都不会获取。
+	而不是保持线程的阻塞，所以直至变的可读取之前，该线程可用继续做其他的事情。非阻塞写的也是如此。一个线程请求写入一些数据到某通道，但不需要
+	等待他完全写入，这个线程同时可以去做别的事情。线程通常将非阻塞IO的空闲时间用于在其他通道上执行IO操作，所以一个单独线程可以管理多个输入和
+	输出通道(channel)；
+	
+	选择器(selelctors)：
+		JAVA NIO的选择器允许一个单独的线程来监视多个输入通道，你可以注册多个通道使用一个选择器，然后使用一个单独的线程来选择通道：这些通道里
+	已经有可以处理的输入，或者选择已准备写入的通道。这种选择机制，使得一个单独的线程很容易来管理多个通道。
+	
+	通道：
+		既可以从通道读取数据，又可以写数据到通道。但流的读写通常是单向的。
+		通道可以异步读写。
+		通道中的数据总是要先读到一个buffer，或者从一个buffer中写入。
+	
+
+
+
+	
+	总结：
+		NIO可以让你使用一个或多个线程管理多个通道，解析数据会比一个阻塞流中读取复杂。
+		如果需要管理同时打开的成千上万个连接，这些连接每次只发送少量的数据，如聊天服务器，实现NIO的服务器可能是一个优势。同样，如果你需要
+	维持许多打开的连接到其他计算机上，使用一个单独的线程来管理你所有出站连接是一个优势。
+	
+	
+		
+		
+HTTP:是Hyper Text Transfer Protocol(超文本传输)的缩写
+	HTTP是一个应用层协议，由请求和响应构成，是一个标准的客户端服务器模型。HTTP是一个无状态协议（同一个客户端的这次请求和上一次请求没有对应关系）。
+	HTTP永远都是客户端发起请求，服务端响应。
+	HTTP请求/响应的步骤：
+		1)客户端连接到web服务器：一个HTTP客户端(浏览器)，与Web服务器的HTTP端口(默认80)建立一个TCP套接字连接。例如:http:www.baidu.com
+		2)发送HTTP请求，通过TCP套接字：客户端向Web服务器发送一个文本的请求报文，一个请求报文由请求行、请求头部、空行、和请求数据4部分组成。
+		3)服务器接受请求并返回HTTP响应：web服务器解析请求，定位请求资源。服务器将资源复本写到TCP套接字，由客户端读取。一个响应由状态行、响应头部、空行和
+	响应数据4部分组成。
+		4)释放连接TCP连接：web服务器主动关闭TCP套接字，释放TCP连接；客户端被动关闭TCP套接字。释放TCP连接。
+		5)客户端浏览器解析HTML内容：客户端浏览器首先解析状态行，查看表明请求是否成功的状态代码。然后解析每个响应头，响应头告知以下为若干字节的HTML文档和
+	文档的字符集。客户端浏览器读取响应数据HTML，根据HTML的语法对其进行格式化，并在浏览器窗口中显示。
+	
+		
+		
+		
+Spring
+	bean 是在什么时候被创建的，有哪些规则？
+		容器初始化的时候会预先对单例和非延迟加载的对象进行预先初始化。其他的都是延迟加载是在第一次调用getBean 的时候被创建。
+
+	1.容器启动阶段：Spring提供了两种方式的BeanDefinition解析器，PropertiesBeanDefinitionReader和XmlBeanDefinitionReader（org.xml.sax包）解析器，也可以自定义自己的解析器，他们
+	都实现了BeanDefinitionReader。加载配置进行解析分析，并将分析后的信息编组为相应的BeanDefinition,注册到相应的BeanDifinitionRegister，存
+	放到beanDefinitionMap(key为beanName,value为BeanDefinition)
+		1)加载配置
+		2)分析配置信息
+		3)装备到BeanDefinition
+		4)其他后处理
+	2.容器实例化阶段：BeanDefinition注册到了BeanDefinitionRegister中之后，当某个请求通过容器的geBean方法明确的请求某个对象，容器会检查所请求的对象是否已经初始化。
+	如果没有，则会根据注册的BeanDefinition所提供的信息实例化请求对象，并未其注入依赖。如果该对象实现了某些回调接口，也会根据回调接口的要求来装配他。当该对象装配完成
+	后，容器会立即返回请求方使用。(如果装载A，会先装载A锁依赖的bean。)
+		1)实例化对象
+		2)装配依赖
+		3)生命周期的回调
+		4)对象其他处理
+		5)注册回调接口
+		
+	为了给容器中定义的每个bean对应的实例注入依赖，可以遍历他们，通过反射检查每个bean定义对应的类上各种可能位置上的Autowired。如果存在的话就可以从当前容器管理的对象
+	中获取符合条件的对象，设置给Autowired标注的地方。
+		
+	BeanFactoryPosProcessor：容器扩展机制。该机制允许我们在容器实例化对象之前，对注册容器的BeanDefinition所保存的信息做修改。比如修改bean定义的某些属性、增加其他信息
+	如果要自定义需要实现这个接口。
+	
+	PropertyPlaceHolerConfigurer：在第一阶段加载完成所有的配置信息时，BeanDifinition中保存的对象属性信息还只是以占位符的形式存在，如${jdbc.url},PPHC会使用propertis配置
+	文件中的配置信息来替换相应的BeanDefication中占位符所表示的属性值。
+		
+	AOP：Spring AOP采用动态带来机制和字节码生成技术(CGLIB)实现，动态带来和字节码生成都是在运行期间为目标生成一个代理对象，而将横切逻辑加入到这个代理对象中。系统最终
+	使用的是加入横切逻辑代理对象，而不是真正的目标对象。如果目标对象没有实现任何接口，Spring AOP 会使用CGLIB(基于类的代理)
+	
+		
+	Spring MVC:当我们对SpringMVC控制的资源发起请求时,这些请求都会被SpringMVC的DispatcherServlet处理，通过BeanNameUrlHandlerMapping找到对应的Controller，然后拿到这个
+	Controller和每个adapter进行适配，找到SimpleControllerHandlerAdapter来完成对应请求的Controller的handlerRequest方法调度，然后就顺利的执行了我们想要的方法。方法
+	会返回一个ModelAndView对象。在获得ModelAndView对象之后，Spring就需要把该View渲染给用户。在这个渲染的过程中，发挥作用的就是ViewResolver和View。当Handler返回
+	ModelAndView中不包含真正的视图，只返回一个逻辑视图名称，ViewResolver就会把改视图名称解析为真正的视图View对象。View是真正进行视图渲染，把结果返回给浏览器的。
+	
+	Spring MVC 5大角色：HandlerMapping、Controller、ModelAndView、ViewResolver、View。
+		 视图:
+			Spring为我们提供了非常多的视图解析器。有一个AbstractCachingViewResolver抽象类，这种视图解析器会把曾经解析的视图保存下来，然后每次解析视图的时候先从缓存
+		里面找，找到了对应的视图就直接返回，如果没有找到就创建一个新的视图对象。然后把他放到一个用于缓存的map中，接着再把新建的视图返回。这种可以降低性能。比较常用
+		的InternalResourceViewResolver是使用比较广泛的视图解析器。InternalResourceViewResolver会把返回的视图名称解析为InternalResourceView对象，InternalResourceView
+		会把Controller处理器方法返回的模型属性都放到对应的request属性中，然后通过RequestDispatcher在服务器端转发或重定向目标URL。
+		
+		获取Handler：(找到Controller)
+		getHandler，通过遍历所有已经注册过的HandlerMapping来找到对应的Handler，然后构建出一个HandlerExecutionChain，
+		他包含了handler和HandlerMaping本身的一些拦截器。
+	
+		HandlerMapping的getHandler实现：有一个getHandlerInternal(request)是个抽象方法，由具体的HandlerMapping
+		来实现，获取到的handler如果为null，则取默认的handler。如果handler为String类型则去容器里面找这样名称的bean.
+		
+		BeanNameUrlHandlerMapping的getHandlerInternal(request)的具体实现,bean的name必须以/开头，他才处理，将信息存储到map中。
+		
+		获取HandlerAdapter：(找到Controller下的方法)
+			同Handler遍历所有已经注册到容器的HandlerAdapter，找到HandlerAdapter。验证是否已实现了HandlerRequestHandler接口
+			若已实现该接口则调用匹配到适配器的实现类下handle方法，执行逻辑。
+
+		初始化HandlerMapping和HandlerAdapter：
+			首先会判断delectAllHandlerMappings是否为true,如果为true，则会去本工程mvc-servlet.xml文件去探测所有实现
+			了HandlerMapping的bean，如果有，则加入DispatcherServlet的HandlerMapprings集合中。如果delectAllHandlerMappings
+			为false，则直接去容器中找id="handlerMapping"且实现了HandlerMappingg的bean，如果都没找到，则会去加载默认
+			的HandlerMapping，会去读取DispatcherServlet.properties文件，里面有默认的BeanNameUrlHandlerMapping、
+			HttpRequestHanderAdapter。
+		
+		HandlerMapping将会通过返回HandlerExecutionChain返回一个Controoler用于具体web请求的处理。可以不只是Controller
+		一种类型。在Spring MVC中任何用于web请求处理的处理对象统称handler。Controller是Handler的一种特殊类型。HandlerMapping
+		通过HandlerExecutionChain返回的一个Object类型的Handler对象，而并没有限制只能是Controller类型。
+
+		HandlerExecutionChain就是一个数据载体，他包含了两方面的数据，一个用于处理Web请求的Handler,另一个则是一组
+		随同Handler一起返回的HandlerInterceptor。这组HandlerInterceptor可以在Handler的执行前后对处理流程拦截操作。
+		
+		
+		HandlerInterceptor:
+		preHandle():该拦截方法将在相应的HandlerAdapter调用具体的Handler处理web请求之前执行。通过boolean判断
+		是否往下执行。true，表明允许后继处理流程继续执行。false：不允许继续往下执行。
+		postHandle():该拦截方法的执行时机为HandlerAdapter调用具体的Handler处理完web请求之后，并且在视图的解析
+		和渲染之前。通过该方法我们可以获取Handler执行后的结果，即ModelAndView。我们可以在原处理结果的基础上对
+		其进行进一步的处理，比如添加新的模型数据。返回为void，不可阻断后续处理。
+		afterCompletion():在框架内整个流程处理完后，或者视图都渲染完了的时候，不管是否发生异常，都会执行。
+		
+		
+		Filter位于DispatcherServlet之前。如果把Filter和HandlerInterceptor看作同一类型的拦截器，Filter将比HanlderInterceptor
+		拥有更高的执行优先级。
+		filter在servlet层面对DispatcherServlet进行拦截，而HandlerInterceptor则位于DispatcherServlet内部，对Handler
+		的执行进行拦截。Filter的应用的位置注定了它不能提供细粒度的拦截时点。通常情况下，使用Filter对应web应用程序
+		中的一些普遍关注点进行统一处理是比较合适的，一旦需要细化处理流程的拦截逻辑，则用HandlerInterceptor。
+
+		Filter是servlet标准组件，需要在xml配置，其生命周期管理更多是由web容器进行管理的。
+		
+		文件上传与MultipartResolver
+		html页面表单最初采用的是application/x-www-form-urlencoded编码方法，并不足以满足文件上传的需要，所以，RFC
+		在基础上新增了multipart/form-data编码的方式以支持基于表单提交的方式支持文件上传。客户端浏览器将按照
+		RFC1867所规定的格式，对提交的表单内容进行编码，服务器只需要根据RFC1867规定的格式对请求中的信息进行解码，
+		就可以获得客户端表单提交的内容，包括上传的文件。
+		
+		MultipartResolver简单分析：
+			当web请求到达DispatcherServlet并等候处理的时候，DispatcherServlet首先会去检查能否从自己的WebApplicationContext
+		中找到一个名称为multipartResolver的MultipartResolver实例。如果能够获得一个实例，DispatcherServlet将通过
+		MultipartResolver的isMultipart(request)方法检查当前web请求是否为multipart类型。如果是DispatcherServlet将调用
+		MultipartResolver的resolverMultipart(request)方法，并返回MultipartHttpServletRequest供后继处理流程使用，否则
+		直接返回HttpServlectRequest。当web类型为multipart的时候，MultipartResolver的resolverMultipart(request)所返回
+		的MultipartHttpServlectRequest将被后继处理流程所依赖的HttpServletRequest而使用。也就是说对应的HttpServletRequest
+		会被替换为MultipartHttpServletRequest，后续的处理的各个环节都是MultipartHttpServletRequest。
+		MultipartResolver接口SpringMVC提供了两个可用的实现类。CommonsMultipartResolver、CosMultipartResolver	
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+
+
+
+	
