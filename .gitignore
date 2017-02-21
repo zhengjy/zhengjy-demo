@@ -1,0 +1,14 @@
+
+*.iml
+.idea/*
+.DS_Store
+*/target
+*.DS_Store
+.settings
+/bin/
+.idea
+stock.logger.*
+*/build/
+build/
+.classpath
+/.idea/

@@ -16,14 +16,14 @@ kafka:
 dubbo远程调用协议：
 	REST(HTTP+JSON/XML) 性能高
 	RPS(TCP+Hessian 2进制序列化) 默认
-	
+
 dubbo节点：
 	Provider：暴露服务的服务提供方。
 	Consumer：调用远程服务的服务消费方。
 	Register：服务注册与发现的注册中心。
 	Monitor：统计服务调用次调和调用时间的监控中心。
 	Container：服务运行容器。
-	
+
 dubbo调用关系：
 	1、服务器启动容器负责启动、加载、运行服务提供者。
 	2、服务提供者在启动时，向注册中心注册自己提供的服务。
@@ -49,9 +49,12 @@ dubbo负载均衡：
 	3、LeastActive，最少活跃调用数，不支持权重，只能根据自动识别的活跃数分配，不能灵活调配
 	4、ConsistentHash，一致性hash,对相同参数的请求路由到一个服务提供者上，如果有类似灰度发布需求可采用
 	dubbo的负载均衡机制是在客户端调用时通过内存中的服务信息及配置的负载均衡策略选择，如果对自己的系统没有一个全面的认知，建议采用默认random
-	
+
 dubbo过滤器：
 
 
 1、注册标签解析器（自定义的dubbo标签），生成对应的BeanDefinition交给spring管理
 2、验证所需要的组件是否已经准备好如(consumer、provider)
+
+dubbo源码解析：
+	使用dubbo.xsd文件来定义dubbo相关的元素及属性;DubboNamespaceHanndler来像spring容器注册dubbo的元素解析器;DubboBeanDefinitionParser用来解析具体的dubbo元素。
