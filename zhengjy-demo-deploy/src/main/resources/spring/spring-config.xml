@@ -6,4 +6,9 @@
          http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd"><!-- 启用spring mvc 注解 -->
 
     <bean id="fooBar" name="x1,x2,x3"  class="com.zhengjy.spring.news.FooBar"></bean>
+    <bean
+            class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="classpath:/templates/" />
+        <property name="suffix" value=".vm" />
+    </bean>
 </beans>

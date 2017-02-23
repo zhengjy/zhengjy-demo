@@ -8,7 +8,7 @@ import org.springframework.web.servlet.ModelAndView;
  * Created by zhengjy on 2016/11/30.
  */
 @Controller
-@RequestMapping("/")
+@RequestMapping("/test")
 public class TestController {
 
     @RequestMapping("/index")
