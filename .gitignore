@@ -8,6 +8,24 @@ duiba-manager-common/duiba-manager-common.iml
 duiba-manager-deploy.iml
 duiba-manager-common/build/*
 duiba-manager-web.iml
+/bin/
+/logs/
+/.idea/
+/.gragle/
+/.settings/
+
+.classpath
+.project
+.project
+.gradle
+robDetail-insertdata.vm
+robIndex-orderlist.vm
+robIndex-puguang.vm
+/build/
+
+RequestLocal.java
+spring-project.xml
+activity-access-web.iml
 
 /out/
 /build/
@@ -23,3 +41,4 @@ zhengjy-demo-api/zhengjy-demo-api.iml
 zhengjy-demo-biz/zhengjy-demo-biz.iml
 zhengjy-demo-common/zhengjy-demo-common.iml
 *.iml
+*.idea

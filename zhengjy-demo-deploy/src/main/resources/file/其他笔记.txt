@@ -150,6 +150,10 @@ Spring
 	会返回一个ModelAndView对象。在获得ModelAndView对象之后，Spring就需要把该View渲染给用户。在这个渲染的过程中，发挥作用的就是ViewResolver和View。当Handler返回
 	ModelAndView中不包含真正的视图，只返回一个逻辑视图名称，ViewResolver就会把改视图名称解析为真正的视图View对象。View是真正进行视图渲染，把结果返回给浏览器的。
 	
+	浏览器发生请求连接，web请求将会被发送到DispatcherServlet进行处理。DispatcherServlet将寻求相应的HandlerMapping对web请求进行解析，然后调用请求结果对应的Controller
+	实现，对应的Controller(请求目标Controller)处理完成将视图名称和模型数据一同返回，然后DispatcherServlet则借住于相应的ViewResolver，根据返回的视图名选择相应的
+	视图并显示。
+	
 	Spring MVC 5大角色：HandlerMapping、Controller、ModelAndView、ViewResolver、View。
 		 视图:
 			Spring为我们提供了非常多的视图解析器。有一个AbstractCachingViewResolver抽象类，这种视图解析器会把曾经解析的视图保存下来，然后每次解析视图的时候先从缓存
@@ -239,7 +243,12 @@ doLoadBeanDefinition(inputSource,encodedResoure.getResource())。
 		
 		
 		
-		
+netty
+	netty的3种连接方式
+		1)使用长连接通道不断开的形式进行通信，也就是说服务器和客户端的通道一直处于开启状态，如果服务器性能比较好，并且客户端数量也必将少的情况下，推荐这种方式。
+		2)一次性批量提交数据，采用短连接方式。也就是说我们会把数据临时保存在本地缓冲区或者临时表，当达到临界线时一次性批量提交，又或者指定定时任务轮询提交，这种
+			情况弊端是做不到实时性传输，在对实时性不高的应用程序中可以推荐使用。
+		3)可以采用一种特殊的长连接，在指定的一个时间内，服务器和某台客户端没有任何通信，则断开连接。下次客户端发起请求的时候，在建立连接。
 		
 		
 
