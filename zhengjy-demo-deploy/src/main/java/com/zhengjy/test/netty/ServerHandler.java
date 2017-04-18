@@ -1,6 +1,8 @@
 package com.zhengjy.test.netty;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
+import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.util.ReferenceCountUtil;
@@ -20,8 +22,10 @@ public class ServerHandler extends ChannelHandlerAdapter {
             buf.readBytes(data);
             String request = new String(data,"utf-8");
             System.out.println("requet："+request);
+            String str = "服务端给客户端的响应:"+request;
+            ctx.writeAndFlush(Unpooled.copiedBuffer(str.getBytes())).
+                    addListener(ChannelFutureListener.CLOSE);//写完给客户端，关闭客户端连接
         }finally {
-            ReferenceCountUtil.release(msg);
         }
 
     }
