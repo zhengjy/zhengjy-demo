@@ -88,18 +88,22 @@
             <artifactId>activemq-all</artifactId>
             <version>5.12.1</version>
             <exclusions>
-                <exclusion>
+                <!--<exclusion>
                     <artifactId>*</artifactId>
                     <groupId>*</groupId>
+                </exclusion>-->
+                <exclusion>
+                    <artifactId>log4j</artifactId>
+                    <groupId>log4j</groupId>
                 </exclusion>
-                <!--<exclusion>
+                <exclusion>
                     <artifactId>org.slf4j</artifactId>
                     <groupId>slf4j-api</groupId>
                 </exclusion>
                 <exclusion>
                     <artifactId>org.slf4j</artifactId>
-                    <groupId>slf4j-log4j12</groupId>
-                </exclusion>-->
+                    <groupId>slf4</groupId>
+                </exclusion>
             </exclusions>
         </dependency>
 
@@ -120,6 +124,9 @@
                             <!--<layout>ZIP</layout>-->
                         </configuration>
                     </execution>
+
+
+
                 </executions>
             </plugin>
 
@@ -128,8 +135,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>2.3.2</version>
                 <configuration>
-                    <target>1.7</target>
-                    <source>1.7</source>
+                    <target>1.8</target>
+                    <source>1.8</source>
                     <encoding>UTF-8</encoding>
                     <fork>true</fork>
                     <debug>true</debug>

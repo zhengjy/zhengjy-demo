@@ -1,5 +1,6 @@
 package com.zhengjy.spring;
 
+import com.zhengjy.spring.event.DemoPublisher;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -9,6 +10,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 public class SpringTest2 {
     public static void main(String[] args) {
         ApplicationContext a = new ClassPathXmlApplicationContext("spring/spring-config.xml");
-        a.getBean("");
+        DemoPublisher publisher = a.getBean(DemoPublisher.class);
+        publisher.publish("hello appliction event");
     }
 }
