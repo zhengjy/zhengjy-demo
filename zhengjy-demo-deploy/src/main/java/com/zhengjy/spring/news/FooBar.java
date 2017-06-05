@@ -11,6 +11,17 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class FooBar implements ApplicationContextAware {
+
+    private String text;
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
     /**
      * 让一个类获取ApplicationContext
      */
