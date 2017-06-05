@@ -1,5 +1,6 @@
 package com.zhengjy.spring;
 
+import com.zhengjy.spring.event.DemoPublisher;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.xml.XmlBeanFactory;
 import org.springframework.context.ApplicationContext;
@@ -16,5 +17,7 @@ public class SpringTest2 {
 
             BeanFactory bf = new XmlBeanFactory(new ClassPathResource("spring/spring-config.xml"));
         System.out.println();
+        DemoPublisher publisher = a.getBean(DemoPublisher.class);
+        publisher.publish("hello appliction event");
     }
 }

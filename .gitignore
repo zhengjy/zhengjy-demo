@@ -42,3 +42,5 @@ zhengjy-demo-biz/zhengjy-demo-biz.iml
 zhengjy-demo-common/zhengjy-demo-common.iml
 *.iml
 *.idea
+.idea/libraries/Maven__com_fasterxml_classmate_1_3_1.xml
+.idea/

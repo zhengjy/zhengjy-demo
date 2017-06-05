@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
 
@@ -14,6 +15,7 @@ import org.springframework.context.annotation.ImportResource;
 @Configuration
 @SpringBootApplication
 @ImportResource("classpath*:spring/spring-config.xml")
+@ConfigurationProperties(locations = {"classpath:config/test.properties"},prefix = "test.")
 public class Application {//extends SpringBootServletInitializer
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Application.class);

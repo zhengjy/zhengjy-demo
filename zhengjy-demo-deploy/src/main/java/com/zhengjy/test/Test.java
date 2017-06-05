@@ -1,6 +1,7 @@
 package com.zhengjy.test;
 
 
+import java.util.Date;
 import java.util.List;
 
 public class Test {
@@ -8,5 +9,6 @@ public class Test {
 		System.out.println("xxxx");
 		List l = new  java.util.ArrayList();
         System.out.println(l.size());
+		Date da;
     }
 }

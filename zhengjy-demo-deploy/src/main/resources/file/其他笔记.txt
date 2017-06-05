@@ -241,7 +241,13 @@ doLoadBeanDefinition(inputSource,encodedResoure.getResource())。
 	将一个对象编码成一个字节流，称作将该对象序列化；相反的处理过程被称为反序列化。一旦对象被序列化后，它的编码就可以从一台正在运行的虚拟机被传递给另外一条虚拟机
 	上，或者被存储到磁盘上，以供反序列化时用。
 		
+		http://www.cnblogs.com/yangy608/archive/2011/06/29/2093478.html
 		
+如果简单地比较Redis与Memcached的区别，大多数都会得到以下观点：
+
+1 、Redis不仅仅支持简单的k/v类型的数据，同时还提供list，set，zset，hash等数据结构的存储。
+2 、Redis支持数据的备份，即master-slave模式的数据备份。
+3 、Redis支持数据的持久化，可以将内存中的数据保持在磁盘中，重启的时候可以再次加载进行使用。
 		
 netty
 	netty的3种连接方式
@@ -249,8 +255,120 @@ netty
 		2)一次性批量提交数据，采用短连接方式。也就是说我们会把数据临时保存在本地缓冲区或者临时表，当达到临界线时一次性批量提交，又或者指定定时任务轮询提交，这种
 			情况弊端是做不到实时性传输，在对实时性不高的应用程序中可以推荐使用。
 		3)可以采用一种特殊的长连接，在指定的一个时间内，服务器和某台客户端没有任何通信，则断开连接。下次客户端发起请求的时候，在建立连接。
-		
-		
+	
+		一个Netty程序开始于Bootstrap类，Bootstrap类是Netty提供的一个可以通过简单配置来设置或引导程序的一个很重要的类。
+Netty中设计了Handlers来处理特定的event和设置Netty中的事件，从而来处理多个协议和数据。事件可以描述成一个非常通
+用的方法，因为你可以自定义一个handler，用来将Object转换byte[]或将byte[]转成Object;
+
+EventLoopGroup和一个Channel关联一个单一的EventLoop,Netty中的EventLoopGroup包含一个或多个EventLoop，而EventLoop
+就是一个Channel执行实际工作的线程。EventLoop总是绑定一个单一的线程，再其生命周期内不会改变。当注册一个Channel后
+，Netty将这个Channel绑定到一个EventLoop，在Channel的生命周期内总是被绑定到一个EventLoop，在Netty IO操作中，你的
+程序不需要同步，因为一个指定通道的所有IO始终由同一个线程来执行。
+
+Bootstrap：
+	引导是Netty中配置程序的过程，当你需要连接客户端或服务器绑定指定端口时需要使用bootstrap。
+	bootstrap有两种类型，一种是用于客户端的Bootstrap，一种用于服务端的ServerBootstrap。
+		ServerBootstrap：
+			在服务器监听一个端口轮询客户端的Bootstrap是否连接服务器。通常需要调用Bootstrap类的connect()
+			方法，但是也可以先调用bind()再调用connect()进行连接，之后使用的Channel保护在bind()返回的
+			ChannelFuture中。
+			ServerBootstrap使用2个EventLoopGroup(相同的实例),一个ServerBootstrap可以任务有2个channels组，第一
+			组包含一个单例ServerChannel，代表持有一个绑定了本地端口的socketl第二组保护所有的Channel，代表服务器
+			已接受了的连接。
+			Netty 可以使用两个不同的Group，因为服务器程序需要接受很多客户端连接的情况下，一个 EventLoopGroup
+			将是程序性能的瓶颈，因为事件循环忙于处理连接请求，没有多余的资源和空闲来处理业务逻辑，最后的结果
+			会是很多连接请求超时。若有两EventLoops， 即使在高负载下，所有的连接也都会被接受，因为 EventLoops 
+			接受连接不会和哪些已经连接了的处理共享资源。
+ChannelInitializer:
+	ChannelInitializer是一个特殊的 ChannelHandler，通道被注册到 EventLoop 后就会调用
+	ChannelInitializer，并允许将 ChannelHandler 添加到 CHannelPipeline；完成初始化通道后，这个特殊的
+	ChannelHandler 初始化器会从 ChannelPipeline 中自动删除。				 
+ByteBuf：
+	ByteBuf有两个部分：一个用于读，一个用于写。可以按照顺序的读取数据，并且可以跳到开始重新读一遍。
+	写入数据到ByteBuf后，写入索引是增加的字节数量。开启读字节后，读取索引增加。
+Channel：
+	ChannelPipeline：
+		ChannelPipeline是ChannelHandler实例的列表，用于处理或截获通道的接收和发送数据。
+		对于每个新的Channel，会创建一个新的ChannelPipeline并附加至通道。一旦链接，Channel和ChannelPipeline之
+		间的耦合是永久的。Channel不能附加其他的ChannelPipeline或从CHannelPipeline分离。
+		ChannelPipeline的作用可以理解为用来管理ChannleHandler的一个容器，每个ChannelHanndler处理各自
+				 的数据，处理完后将转换的数据放到ChannelPipeline中交给下一个ChannelHandler继续处理，直到最后
+				 一个ChannelHandler处理完成。	
+	ChannelHandlerContext:
+		每个ChannelHanndler被添加到ChannelPipeline后，都会创建一个CHannelHandlerContext并与之创建的ChanneHandler
+		关联绑定。ChannelHandlerContext允许ChannelHandler与其他的ChannelHandler实现进行交互，这是相同
+		ChannelPipeline的一部分。
+		一个ChannleHandler绑定的ChannelHandlerContext永远不会改变，所以他的引用缓存起来是安全的。
+		ChannelHandlerContext有很多方法，其中一些方法Channel和ChannelPipeline也有，但是有些区别。如果你在Channel
+		或者ChannelPipeline实例上调用这些方法，它们的调用会穿过整个pipeline。而在ChannleHandlerContext上调用的同
+		样方法，仅仅从当前ChannleHandler开始，走到pipeline中下一个可以处理整个event的ChannlelHandler。
+	
+当注册一个Channel后，Netty将这个CHannel绑定到一个EventLoop，在Channel的生命周期内总是绑定到一个EventLoop。在Netty IO 操作中，你的程序不需要同步，因为一个指定通道的所有IO
+始终由同一个线程来执行	
+
+ByteBuf:写入数据到byteBuf后，写入索引是增加的字节数量。开始读字节后，读取索引增加。知道写入索引和读取索引处理
+相同的位置，黩武穷兵完成。
+	Heap Buffer(堆缓冲区)：
+		最常用的类型是ByteBuf将数据存储在JVM的堆空间，这事通过将数据存储在数组的实现。堆缓冲区可以快速分配，当
+		不使用时也可以快速释放。
+	Direct Buffer(直接缓冲区)
+		直接缓冲区，在堆之外直接分配内存。直接缓冲区不会占用堆空间容量，使用时应该考虑应用程序要使用的最大内存
+		容量以及如何限制它。
+
+	一个Netty程序开始与Bootstrap类，Bootstrap类是Netty提供的一个可以通过简单配置来设置或引导程序的一个重要类。Netty中设计了Handlers来处理特定的event和设置Netty中的事件，
+从而来处理多个协议和数据。时间可以描述成一个通用的方法，因为你可以自定义一个handler，用来将Object转成byte[]或将byte[]转成Object.
+	经常编写一个实现CHannelInboundHandler的类，ChannelInboundHandler是用来接收消息，当有消息过来时，你可以决定如何处理。当程序需要返回消息时可以在CHannelInboundHandler里
+write/flush数据。业务逻辑都是在ChannelInboundHandler中来处理的。
+	Netty链接客户端或绑定服务器需要知道如何发送或接收消息，这事通过不同类型的handlers来做的，多个Handlers是怎么配置的？Netty提供了ChannelInitializer类用来配置Handlers。
+ChannelInitailizer是通过ChannelPipeline来添加ChannelHandler的，如发送和接收消息，这些Handlers将确定发的是什么消息。ChannelIntializer自身也是一个ChannelHandler，在添加完其
+他的handlers之后会自动从ChannelPipeline中删除自己。
+
+
+当注册一个Channel后，Netty将这个CHannel绑定到一个EventLoop，在Channel的生命周期内总是绑定到一个EventLoop。在Netty IO 操作中，你的程序不需要同步，因为一个指定通道的所有IO
+始终由同一个线程来执行。		
+
+
+SpringBoot
+	@SpringBootApplication是一个组合注解，它的核心功能是由@EnableAutoConfiguration，@EnableAutoConfiguration中关键功能@Import注解导入的配置功能，
+	EnableAutoConfigurationImportSelector使用SpringFactoriesLoader.loadFactoryNames方法来扫描具有META-INF/spring.factories文件的jar包，这里用的是
+	spring-boot-autoconfigure.jar中spring.factories文件，此文件中声明了有哪些自动配置。打开spring.factories文件下*AutoConfiguration文件，都组合了@Conditional*元注解，
+
+
+
+Elasticsearch集群可以包含多个索引(indices)（数据库），每一个索引可以包含多个类型(types)（表），每一个类型包含多个文档(documents)（行），然后每个文档包含多个字段(Fields)（列）。
+
+Reactor模式本质上是一个事件机制，通过一个或一组线程检查事件，发现事件知乎交给另一组事件处理线程执行该事件所对应的
+事件处理器(回调)，从而实现高响应的程序。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
