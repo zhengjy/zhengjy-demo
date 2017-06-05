@@ -1,118 +1,115 @@
 kafka:
-	kafka��һ�ֲַ�ʽ�ģ����ڷ���/���ĵ���Ϣϵͳ��kafka����Ϣ����ʱ����Topic���з��࣬������Ϣ�߳�ΪProducer����Ϣ������ΪConsumer����Ϊkafka��Ⱥ�ж��kafkaʵ����ɣ�
-	ÿ��ʵ��(server)��Ϊbroker,������kafka��Ⱥ������producer��consumer������zookeeper����֤ϵͳ�����Լ�Ⱥ����һЩmeta��Ϣ��
-		��Ҫ���Ŀ��Ϊ��
-		1)��ʱ�临�Ӷ�ΪO(1)�ķ�ʽ�ṩ��Ϣ�־û����ܣ���ʹ��TB���ϵ�����Ҳ�ܱ�֤����(��ֵ����ĳ���)ʱ�临�Ӷȵķ���
-		2)�������ʣ���ʹ�ڷǳ����۵Ļ���Ҳ����������֧��ÿ��100K��������Ϣ����
-		3)֧��kafka Server�����Ϣ���������ֲ�ʽ���ѣ�ͬʱ��֤ÿ��Partition�ڵ���Ϣ˳����
-		4)ͬʱ֧���������ݴ�����ʵʱ���ݴ���
-	
-	topics��ÿ��������Kafka��Ⱥ����Ϣ����һ����������𱻳�ΪTopic��һ��topics������Ϊ��һ����Ϣ��ÿ��topics������Ϊ���partition(��),
-	ÿ��partition�ڴ洢������append log�ļ����κη�������parition����Ϣ���ᱻֱ��׷�ӵ�log�ļ�
-	��β����ÿ����Ϣ���ļ��е�λ�ó�Ϊoffset(ƫ����),offsetΪһ��long�����֣�����Ψһ���һ����Ϣ��kafka��û���ṩ��������������������洢offset,��Ϊkafka�м���������
-	����Ϣ���С������д��.
-	
-	
-dubboԶ�̵���Э�飺
-	REST(HTTP+JSON/XML) ���ܸ�
-	RPS(TCP+Hessian 2�������л�) Ĭ��
+	kafka是一种分布式的，基于发布/订阅的消息系统。kafka对消息保存时根据Topic进行分类，发送消息者成为Producer，消息接受者为Consumer，此为kafka集群有多个kafka实例组成，
+	每个实例(server)成为broker,无论是kafka集群，还是producer和consumer都依赖zookeeper来保证系统可用性集群保存一些meta信息。
+		主要设计目标为：
+		1)以时间复杂度为O(1)的方式提供消息持久化功能，即使对TB以上的数据也能保证常数(数值不变的常量)时间复杂度的访问
+		2)高吞吐率，即使在非常廉价的机器也能做到单机支持每秒100K条以上消息传输
+		3)支持kafka Server间的消息分区，及分布式消费，同时保证每个Partition内的消息顺序传输
+		4)同时支持离线数据处理和实时数据处理
 
-dubboЭ�飺
-	dubboȱʡЭ����õ�һ�����Ӻ�NIO�첽ͨѶ��������С�������󲢷��ĵ��ã��Լ����������߻�����Զ���ڷ����ṩ�߻������������
-	ȱʡЭ�飬ʹ�û���mina1.1.7+hessian3.2.1��tbremoting������
-		���Ӹ�����������
-		���ӷ�ʽ��������
-		����Э�飺TCP
-		���䷽ʽ��NIO�첽����
-		���л���Hessian���������л�
-		���÷�Χ�����봫���������ݰ���С������С��100K���������߱��ṩ�߸����࣬��һ�������޷�ѹ���ṩ�ߣ�������Ҫ��dubboЭ�鴫����ļ��򳬴��ַ�����
-		���ó���������Զ�̷��񷽷�����	
-RMIЭ�飺
-	rmiЭ�����JDK��׼��java.rmi.*ʵ�֣���������ʽ�����Ӻ�JDK��׼���л���ʽ
-	Java��׼��Զ�̵���Э�顣
-		���Ӹ�����������
-		���ӷ�ʽ��������
-		����Э�飺TCP
-		���䷽ʽ��ͬ������
-		���л���Java��׼���������л�
-		���÷�Χ�����봫���������ݰ���С��ϣ����������ṩ�߸�����࣬�ɴ��ļ���
-		���ó���������Զ�̷��񷽷����ã���ԭ��RMI���񻥲���
-hessianЭ�飺
-	HessianЭ�����ڼ���Hessian�ķ���Hessian�ײ����HttpͨѶ������Servlet��¶����Dubboȱʡ��ǶJetty��Ϊ������ʵ��
-	����Hessian��Զ�̵���Э�顣
-		���Ӹ�����������
-		���ӷ�ʽ��������
-		����Э�飺HTTP
-		���䷽ʽ��ͬ������
-		���л���Hessian���������л�
-		���÷�Χ�����봫���������ݰ��ϴ��ṩ�߱������߸����࣬�ṩ��ѹ���ϴ󣬿ɴ��ļ���
-		���ó�����ҳ�洫�䣬�ļ����䣬����ԭ��hessian���񻥲���
-httpЭ��:
-	����Spring��HttpInvokerʵ��
-	����http������Զ�̵���Э�顣
-		���Ӹ�����������
-		���ӷ�ʽ��������
-		����Э�飺HTTP
-		���䷽ʽ��ͬ������
-		���л����������л���JSON��
-		���÷�Χ�����봫���������ݰ���С��ϣ��ṩ�߱������߸����࣬����������鿴�����ñ�����URL����������ݲ�֧�ִ��ļ���
-		���ó�������ͬʱ��Ӧ�ó���������JSʹ�õķ���	
-		
-dubbo�ڵ㣺
-	Provider����¶����ķ����ṩ����
-	Consumer������Զ�̷���ķ������ѷ���
-	Register������ע���뷢�ֵ�ע�����ġ�
-	Monitor��ͳ�Ʒ�����ôε��͵���ʱ��ļ�����ġ�
-	Container����������������
+	topics：每条发布到Kafka集群的消息都有一个类别，这个类别被称为Topic。一个topics可以认为是一类消息，每个topics将被分为多个partition(区),
+	每个partition在存储层面是append log文件。任何发布到此parition的消息都会被直接追加到log文件
+	的尾部，每条消息在文件中的位置成为offset(偏移量),offset为一个long型数字，他是唯一标记一条信息。kafka并没有提供其他额外的索引机制来存储offset,因为kafka中几乎不允许
+	对消息进行”随机读写“.
 
-dubbo���ù�ϵ��
-	1�����������������������������ء����з����ṩ�ߡ�
-	2�������ṩ��������ʱ����ע������ע���Լ��ṩ�ķ���
-	3������������������ʱ����ע�����Ķ����Լ�����ķ���
-	4��ע�����ķ����ṩ�ߵ�ַ�б��������ߣ����б����ע�����Ľ����ڳ��������ͱ�����ݸ������ߡ�
-	5�����������ߣ����ṩ�ߵ�ַ�б��У������������ؾ����㷨��ѡһ̨�ṩ�߽��е��ã��������ʧ�ܣ��ڵ�����һ̨���á�
-	6�����������ߺ��ṩ�ߣ����ڴ����ۼƵ��ô����͵���ʱ�䣬��ʱÿ���ӷ���һ��ͳ�����ݵ�������ġ�
-	�����ṩ���������񵽷���ע������
-	�������ѷ��ӷ���ע�����Ķ��ķ���
-	�������ѷ�������ע��Ŀ��÷���
 
-dubboӦ��ִ�����̣�
-	1�������ṩ������������Э����Ϣ�󶨵����õ�IP�Ͷ˿��ϣ�������з������ͬ��IP�Ͷ˿�������
-	2��ע�������Ϣ��ע������
-	3���ͻ������������ݽӿں�Э����Ϣ����ע�����Ķ�����ע��ķ���ע�����Ľ����ķ����ַ֪ͨ���ͻ��ˣ����з�����Ϣ���ʱ�ͻ��˿���ͨ����ʱ
-֪ͨ�õ������Ϣ
-	4���ڿͻ�����Ҫ���÷���ʱ�����ڴ����õ��ϴ�֪ͨ�����д���ַ������·����Ϣ�͸��ؾ���ѡ�����յ��õķ����ַ���������
-	5��ͨ��filter�ֱ��ڿͻ��˷�������ǰ�ͷ�����յ������ͨ���첽��¼һЩ��Ҫ����Ϣ���ݵ�monitor�����
+dubbo远程调用协议：
+	REST(HTTP+JSON/XML) 性能高
+	RPS(TCP+Hessian 2进制序列化) 默认
 
-dubbo���ؾ��⣺
-	1��Random,���,��Ȩ������������ʸ��ʣ�������Խ�����Խ���ȣ�Ĭ�������ַ�ʽ��
-	2��RoundRobin����ѯ����Ȩ��������ѯ������������ڽ����Ļ�����������̨��������������Խ��
-	3��LeastActive�����ٻ�Ծ����������֧��Ȩ�أ�ֻ�ܸ����Զ�ʶ��Ļ�Ծ�����䣬����������
-	4��ConsistentHash��һ����hash,����ͬ����������·�ɵ�һ�������ṩ���ϣ���������ƻҶȷ�������ɲ���
-	dubbo�ĸ��ؾ���������ڿͻ��˵���ʱͨ���ڴ��еķ�����Ϣ�����õĸ��ؾ������ѡ��������Լ���ϵͳû��һ��ȫ�����֪���������Ĭ��random
+dubbo协议：
+	dubbo缺省协议采用单一长链接和NIO异步通讯，适用于小数据量大并发的调用，以及服务消费者机器数远大于服务提供者机器数的情况。
+	缺省协议，使用基于mina1.1.7+hessian3.2.1的tbremoting交互。
+		连接个数：单连接
+		连接方式：长连接
+		传输协议：TCP
+		传输方式：NIO异步传输
+		序列化：Hessian二进制序列化
+		适用范围：传入传出参数数据包较小（建议小于100K），消费者比提供者个数多，单一消费者无法压满提供者，尽量不要用dubbo协议传输大文件或超大字符串。
+		适用场景：常规远程服务方法调用
+RMI协议：
+	rmi协议采用JDK标准的java.rmi.*实现，采用阻塞式短连接和JDK标准序列化方式
+	Java标准的远程调用协议。
+		连接个数：多连接
+		连接方式：短连接
+		传输协议：TCP
+		传输方式：同步传输
+		序列化：Java标准二进制序列化
+		适用范围：传入传出参数数据包大小混合，消费者与提供者个数差不多，可传文件。
+		适用场景：常规远程服务方法调用，与原生RMI服务互操作
+hessian协议：
+	Hessian协议用于集成Hessian的服务，Hessian底层采用Http通讯，采用Servlet暴露服务，Dubbo缺省内嵌Jetty作为服务器实现
+	基于Hessian的远程调用协议。
+		连接个数：多连接
+		连接方式：短连接
+		传输协议：HTTP
+		传输方式：同步传输
+		序列化：Hessian二进制序列化
+		适用范围：传入传出参数数据包较大，提供者比消费者个数多，提供者压力较大，可传文件。
+		适用场景：页面传输，文件传输，或与原生hessian服务互操作
+http协议:
+	采用Spring的HttpInvoker实现
+	基于http表单的远程调用协议。
+		连接个数：多连接
+		连接方式：短连接
+		传输协议：HTTP
+		传输方式：同步传输
+		序列化：表单序列化（JSON）
+		适用范围：传入传出参数数据包大小混合，提供者比消费者个数多，可用浏览器查看，可用表单或URL传入参数，暂不支持传文件。
+		适用场景：需同时给应用程序和浏览器JS使用的服务。
 
-�����˽⣺	
-	1.<dubbo:service/> �������ã����ڱ�¶һ�����񣬶�������Ԫ��Ϣ��һ����������ö��Э�鱩¶��һ������Ҳ����ע�ᵽ���ע�����ġ�
-	2.��ͨ��ע���ṩ����͵��á�
-	3.Dubboȱʡ��������ʱ��������ķ����Ƿ���ã�������ʱ���׳��쳣����ֹSpring��ʼ����ɣ��Ա�����ʱ���ܼ��緢�����⣬Ĭ��check=true;
-		�ر����з��������ʱ��飺(û���ṩ��ʱ����)<dubbo:consumer check="false" />
-	4.�ڿ��������Ի����£�������Ҫ�ƹ�ע�����ģ�ֻ����ָ�������ṩ�ߣ���ʱ�������Ҫ��Ե�ֱ�����Զ�����${user.home}/dubbo-resolve.properties�ļ�������Ҫ����
-	5.�����÷����ṩ�߿�������ֻ���ķ���(�����ķ������������������)������ע�����ڿ����ķ���ͨ��ֱ���������ڿ����ķ���
+dubbo节点：
+	Provider：暴露服务的服务提供方。
+	Consumer：调用远程服务的服务消费方。
+	Register：服务注册与发现的注册中心。
+	Monitor：统计服务调用次调和调用时间的监控中心。
+	Container：服务运行容器。
+
+dubbo调用关系：
+	1、服务器启动容器负责启动、加载、运行服务提供者。
+	2、服务提供者在启动时，向注册中心注册自己提供的服务。
+	3、服务消费者在启动时，向注册中心订阅自己所需的服务。
+	4、注册中心返回提供者地址列表给消费者，如有变更，注册中心将基于长连接推送变更数据给消费者。
+	5、服务消费者，从提供者地址列表中，基于软件负载均衡算法，选一台提供者进行调用，如果调用失败，在调用另一台调用。
+	6、服务消费者和提供者，在内存中累计调用次数和调用时间，定时每分钟发送一次统计数据到监控中心。
+	服务提供方发布服务到服务注册中心
+	服务消费方从服务注册中心订阅服务
+	服务消费方调用已注册的可用服务
+
+dubbo应用执行流程：
+	1、服务提供者启动，根据协议信息绑定到配置的IP和端口上，如果已有服务绑定相同的IP和端口则跳过
+	2、注册服务信息至注册中心
+	3、客户端启动，根据接口和协议信息订阅注册中心订阅中注册的服务，注册中心将存活的服务地址通知到客户端，当有服务信息变更时客户端可以通过定时
+通知得到变更信息
+	4、在客户端需要调用服务时，从内存中拿到上次通知的所有存活地址，根据路由信息和负载均衡选择最终调用的服务地址，发起调用
+	5、通过filter分别在客户端发送请求前和服务端收到请求后，通过异步记录一些需要的信息传递到monitor做监控
+
+dubbo负载均衡：
+	1、Random,随机,按权重配置随机访问概率，调用量越大分配越均匀，默认是这种方式。
+	2、RoundRobin，轮询，按权重设置轮询比例，如果存在较慢的机器容易在这台机器的请求阻塞越多
+	3、LeastActive，最少活跃调用数，不支持权重，只能根据自动识别的活跃数分配，不能灵活调配
+	4、ConsistentHash，一致性hash,对相同参数的请求路由到一个服务提供者上，如果有类似灰度发布需求可采用
+	dubbo的负载均衡机制是在客户端调用时通过内存中的服务信息及配置的负载均衡策略选择，如果对自己的系统没有一个全面的认知，建议采用默认random
+
+其他了解：
+	1.<dubbo:service/> 服务配置，用于暴露一个服务，定义服务的元信息，一个服务可以用多个协议暴露，一个服务也可以注册到多个注册中心。
+	2.可通过注解提供服务和调用。
+	3.Dubbo缺省会在启动时检查依赖的服务是否可用，不可用时会抛出异常，阻止Spring初始化完成，以便上线时，能及早发现问题，默认check=true;
+		关闭所有服务的启动时检查：(没有提供者时报错)<dubbo:consumer check="false" />
+	4.在开发及测试环境下，经常需要绕过注册中心，只测试指定服务提供者，这时候可能需要点对点直连。自动加载${user.home}/dubbo-resolve.properties文件，不需要配置
+	5.可以让服务提供者开发方，只订阅服务(开发的服务可能依赖其它服务)，而不注册正在开发的服务，通过直连测试正在开发的服务。
 		<dubbo:registry address="10.20.153.10:9090" register="false" />
-	6.��Э�鱩¶����
+	6.多协议暴露服务
 		<dubbo:protocol name="dubbo" port="20880" />
 		<dubbo:protocol name="hessian" port="8080" />
-	7.��ע������ע��
+	7.多注册中心注册
 		<dubbo:registry id="hangzhouRegistry" address="10.20.141.150:9090" />
 		<dubbo:registry id="qingdaoRegistry" address="10.20.141.151:9010" default="false" />
-dubbo��������
+dubbo过滤器：
 
 
-1��ע���ǩ���������Զ����dubbo��ǩ�������ɶ�Ӧ��BeanDefinition����spring����
-2����֤����Ҫ������Ƿ��Ѿ�׼������(consumer��provider)
+1、注册标签解析器（自定义的dubbo标签），生成对应的BeanDefinition交给spring管理
+2、验证所需要的组件是否已经准备好如(consumer、provider)
 
-dubboԴ�������
-	ʹ��dubbo.xsd�ļ�������dubbo��ص�Ԫ�ؼ�����;DubboNamespaceHanndler����spring����ע��dubbo��Ԫ�ؽ�����;DubboBeanDefinitionParser�������������dubboԪ�ء�
-	
-	
-Rem	
+dubbo源码解析：
+	使用dubbo.xsd文件来定义dubbo相关的元素及属性;DubboNamespaceHanndler来像spring容器注册dubbo的元素解析器;DubboBeanDefinitionParser用来解析具体的dubbo元素。
