@@ -8,6 +8,6 @@ import java.io.File;
  */
 public class Test {
     public static void main(String[] args) {
-        File[] hf = new File(".").listFiles(File::isHidden);
+//        File[] hf = new File(".").listFiles(File::isHidden);
     }
 }
