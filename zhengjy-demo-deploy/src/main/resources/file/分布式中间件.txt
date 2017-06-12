@@ -113,3 +113,47 @@ dubbo过滤器：
 
 dubbo源码解析：
 	使用dubbo.xsd文件来定义dubbo相关的元素及属性;DubboNamespaceHanndler来像spring容器注册dubbo的元素解析器;DubboBeanDefinitionParser用来解析具体的dubbo元素。
+
+
+
+RocketMQ:
+	RocketMQ所有消息都是持久化硬盘的。
+	p发送第一条消息给MQ。回调本地事物执行，保证MQ一定有数据，本地事物一定执行的。根据本地事物执行成功失败返回一个状态，执行成功的话就发送给MQ，MQ标识可以消费。
+	c就可以消费这个mq。
+	RocketMQ第一阶段发送Prepared(事先准备好的)消息时，会拿到消息的地址，第二阶段执行本地事物，第三阶段通过第一阶段拿到的地址
+	去访问消息，并修改状态。如果确认消息发送失败了怎么办？RocketMQ会定期扫描消息集群中的事物消息，如果发现了Prepared消息，
+	他会向消息发送者确认，通过RocketMQ策略来决定是回滚还是继续发送确认消息。
+
+
+Zookeeper
+	使用Zookeeper的临时性ZNode来存放服务提供者的RMI地址，一旦与服务提供者的Session中断，自动清除ZNode。
+	服务消费者去监听ZNode，一旦发现Znode的数据有变化，就会从新获取一份有效数据的拷贝。
+	服务消费者在创建的时候连接Zookeeper，同时监听/register节点的NodeChildrenChanage事件，一旦/register节点的子节点变化，就需要重写获取最新的子节点。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

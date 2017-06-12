@@ -18,7 +18,7 @@
     </bean>
     <bean id="teacher" class="com.zhengjy.spring.u2.Teacher"/>
     <bean scope="prototype"
-            class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+          class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="prefix" value="classpath:/templates/" />
         <property name="suffix" value=".vm" />
     </bean>
