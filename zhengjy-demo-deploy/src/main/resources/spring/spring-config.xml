@@ -34,7 +34,7 @@
     </bean>
 
     <bean id="boss" class="com.zhengjy.spring.循环依赖.Boss">
-        <constructor-arg index="0" value="Liweiwei"></constructor-arg>
-        <constructor-arg index="1" ref="office"></constructor-arg>
+       <!-- <constructor-arg index="0" value="Liweiwei"></constructor-arg>
+        <constructor-arg index="1" ref="office"></constructor-arg>-->
     </bean>
 </beans>

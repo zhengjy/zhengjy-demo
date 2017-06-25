@@ -7,9 +7,9 @@ public class Boss {
     private String name;
     private Office office;
 
-    /*public Boss(){
+    public Boss(){
 
-    }*/
+    }
     public Boss(String name,Office office){
         this.name=name;
         this.office=office;

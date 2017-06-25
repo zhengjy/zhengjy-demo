@@ -17,8 +17,8 @@ import org.springframework.core.io.ClassPathResource;
  */
 public class SpringTest2 {
     public static void main(String[] args) {
-       /* ApplicationContext a = new ClassPathXmlApplicationContext("spring/spring-config.xml");
-        a.getBean("fooBar");*/
+        ApplicationContext a = new ClassPathXmlApplicationContext("spring/spring-config.xml");
+        a.getBean("fooBar");
 
         BeanFactory bf = new XmlBeanFactory(new ClassPathResource("spring/spring-config.xml"));
        /* User u = (User) bf.getBean("user");
@@ -26,8 +26,8 @@ public class SpringTest2 {
         Car car = (Car) bf.getBean("car");
         CarFactoryBean cf = (CarFactoryBean) bf.getBean("&car");*/
         Boss boss = (Boss) bf.getBean("boss");
+        Boss boss2 = (Boss) bf.getBean("boss");
         Office office = (Office) bf.getBean("office");
-
         /*DemoPublisher publisher = bf.getBean(DemoPublisher.class);
         publisher.publish("hello appliction event");*/
     }
