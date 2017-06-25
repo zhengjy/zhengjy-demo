@@ -9,7 +9,7 @@ import java.util.concurrent.*;
  * Author：zhengjy
  */
 public class Callables {
-	public static <V> void main(String[] args) {
+	/*public static <V> void main(String[] args) {
 		List<Callable<V>> callable  = new ArrayList<Callable<V>>();
 		callable.add(new Callable<V>() {
 			@Override
@@ -30,12 +30,12 @@ public class Callables {
 		
 	}
 	
-	/**
+	*//**
 	 * 在线程池运行任务并阻塞直到所有线程都完成，Callables的顺序和返回值的顺序一样
 	 * @param executor
 	 * @param callables
 	 * @return
-	 */
+	 *//*
 	public static <V> List<V> submitTask(Executor executor,List<Callable<V>> callables){
 		
 		final CountDownLatch latch = new CountDownLatch(callables.size());//多少个线程
@@ -58,12 +58,12 @@ public class Callables {
 					}
 				}
 			});
-			/*try {
+			*//*try {
 				executor.invokeAll(callables);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}*/
+			}*//*
 		}
 		
 		try {
@@ -77,5 +77,5 @@ public class Callables {
 			ret.add(concurrent.get(k));
 		}
 		return ret;
-	}
+	}*/
 }

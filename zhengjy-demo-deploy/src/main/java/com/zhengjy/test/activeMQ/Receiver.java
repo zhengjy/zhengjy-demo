@@ -1,14 +1,11 @@
 package com.zhengjy.test.activeMQ;
 
-import org.apache.activemq.ActiveMQConnectionFactory;
-
-import javax.jms.*;
 
 /**
  * Created by zhengjy on 2017/4/4.
  */
 public class Receiver {
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws Exception {/*
         //1.建立cf工厂对象，需要填入用户名密码，已经连接的地址
         ConnectionFactory cf = new ActiveMQConnectionFactory(
                 ActiveMQConnectionFactory.DEFAULT_USER,
@@ -34,7 +31,7 @@ public class Receiver {
         }
         if(connection != null){
             connection.close();
-        }
+        }*/
 
 
 

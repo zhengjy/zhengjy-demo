@@ -1,20 +1,20 @@
-package com.zhengjy.tag;
+package com.zhengjy.spring;
 
 /**
- * Created by zhengjy on 2016/11/30.
+ * Created by zhengjy on 2017/6/14.
  */
-public class User {
+public class User2 {
     private String userName;
     private String email;
 
-    public User(){
+    public User2(){
 
     }
-    public User(String userName) {
+    public User2(String userName) {
         this.userName = userName;
     }
 
-    public User(String userName, String email) {
+    public User2(String userName, String email) {
         this.userName = userName;
         this.email = email;
     }

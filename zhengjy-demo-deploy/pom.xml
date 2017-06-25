@@ -83,15 +83,15 @@
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.apache.activemq/activemq-all -->
-        <dependency>
+        <!--<dependency>
             <groupId>org.apache.activemq</groupId>
             <artifactId>activemq-all</artifactId>
             <version>5.12.1</version>
             <exclusions>
-                <!--<exclusion>
+                &lt;!&ndash;<exclusion>
                     <artifactId>*</artifactId>
                     <groupId>*</groupId>
-                </exclusion>-->
+                </exclusion>&ndash;&gt;
                 <exclusion>
                     <artifactId>log4j</artifactId>
                     <groupId>log4j</groupId>
@@ -106,7 +106,7 @@
                 </exclusion>
             </exclusions>
         </dependency>
-
+-->
     </dependencies>
     <build>
         <finalName>com-zhengjy-1.0-SNAPSHOT</finalName>

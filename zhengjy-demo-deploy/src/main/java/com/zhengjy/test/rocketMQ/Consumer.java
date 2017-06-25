@@ -8,7 +8,6 @@ import com.alibaba.rocketmq.client.consumer.listener.MessageListenerOrderly;
 import com.alibaba.rocketmq.client.exception.MQClientException;
 import com.alibaba.rocketmq.common.consumer.ConsumeFromWhere;
 import com.alibaba.rocketmq.common.message.MessageExt;
-import org.apache.activemq.memory.list.MessageList;
 
 import java.util.List;
 import java.util.Random;
