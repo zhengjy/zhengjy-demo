@@ -1,0 +1,31 @@
+<html>
+<head>
+    <script type="text/javascript" src="/js/jquery.js"></script>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <script type="text/javascript">
+        function test(){
+            $.ajax({
+                //提交数据的类型 POST GET
+                type:"POST",
+                //提交的网址
+                url:"/converter/convert",
+                //提交的数据
+                data:{id:"123",name:"xxxx"},
+                contentType:"applicaiton/x-wisely",
+                success:function(data){
+                    $("#resp").html(decodeURI(data));
+                },
+                //调用出错执行的函数
+                error: function(){
+                    //请求出错处理
+                }
+            });
+
+        }
+    </script>
+</head>
+<body>
+    <div id="resp"></div>
+    <input type="button" onclick="test()" value="请求"/>
+</body>
+</html>

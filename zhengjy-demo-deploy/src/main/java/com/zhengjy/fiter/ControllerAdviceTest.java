@@ -21,8 +21,9 @@ import java.io.PrintWriter;
 @ControllerAdvice
 public class ControllerAdviceTest {
 
-    @ModelAttribute
+    @ModelAttribute("user")
     public UserVO newUser(UserVO user) {
+        user.setName("xxxxx");
         System.out.println("============应用到所有@RequestMapping注解方法，在其执行之前把返回值放入Model");
         return user;
     }

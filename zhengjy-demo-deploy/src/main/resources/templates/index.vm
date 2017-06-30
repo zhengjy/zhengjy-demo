@@ -5,6 +5,8 @@
     <title>Title</title>
 </head>
 <body>
+${t.id}
+${user.name}
 index_vm
 </body>
 </html>

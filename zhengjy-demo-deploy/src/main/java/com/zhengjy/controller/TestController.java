@@ -12,8 +12,10 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/test")
 public class TestController {
 
-    @RequestMapping("/index")
+    @RequestMapping("/index2")
     public ModelAndView index(String str,String str2){
-        return  new ModelAndView("/index").addObject(new Test());
+        Test t = new Test();
+        t.setId(1111);
+        return  new ModelAndView("/index").addObject("t",t);
     }
 }
