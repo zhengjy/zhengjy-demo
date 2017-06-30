@@ -48,10 +48,10 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-        <dependency>
+       <!-- <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-velocity</artifactId>
@@ -100,11 +100,11 @@
             <artifactId>disruptor</artifactId>
             <version>3.3.6</version>
         </dependency>
-        <dependency>
+       <!-- <dependency>
             <groupId>com.alibaba.rocketmq</groupId>
             <artifactId>rocketmq-client</artifactId>
             <version>3.2.6</version>
-        </dependency>
+        </dependency>-->
     </dependencies>
     <build>
         <finalName>com-zhengjy-1.0-SNAPSHOT</finalName>
