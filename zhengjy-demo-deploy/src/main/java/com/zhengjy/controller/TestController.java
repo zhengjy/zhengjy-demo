@@ -1,5 +1,6 @@
 package com.zhengjy.controller;
 
+import com.zhengjy.spring.User2;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -12,7 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 public class TestController {
 
     @RequestMapping("/index")
-    public ModelAndView index(){
-        return  new ModelAndView("/index");
+    public ModelAndView index(String str,String str2){
+        return  new ModelAndView("/index").addObject(new Test());
     }
 }
