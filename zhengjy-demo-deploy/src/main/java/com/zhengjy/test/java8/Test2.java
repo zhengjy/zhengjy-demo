@@ -3,7 +3,6 @@ package com.zhengjy.test.java8;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Callable;
-import java.util.stream.Collectors;
 
 /**
  * Created by zhengjy on 2017/6/19.

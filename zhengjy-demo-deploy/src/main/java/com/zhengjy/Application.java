@@ -29,6 +29,6 @@ public class Application {//extends SpringBootServletInitializer
         long start = System.currentTimeMillis();
         SpringApplication.run(Application.class, args);
         long period = System.currentTimeMillis() - start;
-        LOGGER.error("duiba-service start successfully in "+period+" ms.");
+        LOGGER.error(" start successfully in "+period+" ms.");
     }
 }

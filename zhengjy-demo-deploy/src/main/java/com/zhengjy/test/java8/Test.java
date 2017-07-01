@@ -1,20 +1,24 @@
+/*
 package com.zhengjy.test.java8;
 
 
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Supplier;
 
+*/
 /**
  * Created by zhengjy on 2017/3/3.
- */
+ *//*
+
 
 public class Test {
+*/
 /*
 
     public static void main(String[] args) {
-        String separator = ",";
+        */
+/*String separator = ",";
         Arrays.asList( "a", "b", "d" ).forEach(
                 ( String e ) -> System.out.print( e + separator ) );
 
@@ -25,11 +29,12 @@ public class Test {
         } );
 
         final Car car = Car.create( Car::new );
-        final List< Car > cars = Arrays.asList( car );
+        final List< Car > cars = Arrays.asList( car );*//*
 
-    }
+
     public static class Car {
-        public static Car create( final Supplier< Car > supplier ) {
+        */
+/*public static Car create( final Supplier< Car > supplier ) {
             return supplier.get();
         }
 
@@ -43,10 +48,8 @@ public class Test {
 
         public void repair() {
             System.out.println( "Repaired " + this.toString() );
-        }
-    }
-    @org.junit.Test
-    public  void test1(){
+        }*//*
 
-    }*/
+
 }
+*/
