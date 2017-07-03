@@ -37,6 +37,7 @@ public class TestWebMvcConfigurerAdapter extends WebMvcConfigurerAdapter {
         registry.addViewController("/test/index").setViewName("/index");
         registry.addViewController("/converter/index").setViewName("/converter_index");
         registry.addViewController("/sse/sse").setViewName("/sse");
+        registry.addViewController("/aysnc/deferred").setViewName("/async");
     }
 
     @Override
