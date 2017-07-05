@@ -152,6 +152,14 @@ synchronized原理：
 interrupt线程中断：
 	对线程中断的正确理解是：他并不会真正中断一个正在运行的线程，而只是发出中断请求，然后由下一个适合的时刻中断自己。
 	
+	
+独占锁:
+	锁在一个时间点只能被一个线程锁占有。ReentrantReadWriteLock.WriteLock也是独占锁。
+共享锁：
+	能被多个线程同时拥有，能被共享的锁。ReentrantReadWriteLock.ReadLock，CyclicBarrier， CountDownLatch和Semaphore都是共享锁
+自旋锁：
+	指当前一个线程尝试获取某个锁时，如果该锁已被其他线程占用，就一直循环检查锁是否释放，而不是进入线程挂起或睡眠。
+	
 JAVA内存模型（JAVA Memory Model）
 	JMM主要是为了规定线程与内存之间的一些关系。根据JMM的设计，系统存在一个主内存，Java中所有实例变量都存储在主内存中，
 对于所有线程都是共享的。每条线程都用自己的工作内存，工作内存由缓存和堆栈两部分组成，缓存中保存的是主内存中变量的拷贝，
