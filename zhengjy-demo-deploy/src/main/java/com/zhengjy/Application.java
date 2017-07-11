@@ -16,6 +16,7 @@ import org.springframework.context.annotation.ImportResource;
 @SpringBootApplication
 @ImportResource("classpath*:spring/spring-config.xml")
 @ConfigurationProperties(locations = {"classpath:config/test.properties"},prefix = "test.")
+
 public class Application {//extends SpringBootServletInitializer
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Application.class);
