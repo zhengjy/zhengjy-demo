@@ -5,7 +5,7 @@
     <title>Title</title>
 </head>
 <body>
-${t.id}
+${t}
 ${user.name}
 index_vm
 </body>
