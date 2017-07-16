@@ -73,7 +73,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-config</artifactId>
@@ -83,12 +82,24 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.10</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>6.9.10</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.zhengjy.test</groupId>
+            <artifactId>dubbo-provider</artifactId>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/io.netty/netty-all -->
@@ -123,11 +134,11 @@
             <artifactId>disruptor</artifactId>
             <version>3.3.6</version>
         </dependency>
-       <!-- <dependency>
+        <dependency>
             <groupId>com.alibaba.rocketmq</groupId>
             <artifactId>rocketmq-client</artifactId>
             <version>3.2.6</version>
-        </dependency>-->
+        </dependency>
     </dependencies>
     <build>
         <finalName>com-zhengjy-1.0-SNAPSHOT</finalName>
@@ -219,4 +230,17 @@
 
         </plugins>
     </build>
+    <!-- 配置发布到私服 -->
+    <distributionManagement>
+        <repository>
+            <id>nexus-releases</id>
+            <name>nexus-releases</name>
+            <url>http://192.168.241.134:8081/nexus/content/repositories/releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>nexus-snapshots</id>
+            <name>nexus-snapshots</name>
+            <url>http://192.168.241.134:8081/nexus/content/repositories/snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
 </project>

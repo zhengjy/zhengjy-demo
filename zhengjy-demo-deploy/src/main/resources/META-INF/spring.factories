@@ -1,2 +1,5 @@
 org.springframework.boot.SpringApplicationRunListener=\
 com.zhengjy.spring.boot.SpringApplicationRunListenerTest
+
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.zhengjy.spring.condition.t2.HelloServiceAutoConfiguration

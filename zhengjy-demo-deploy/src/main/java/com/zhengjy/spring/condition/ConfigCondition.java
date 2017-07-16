@@ -14,7 +14,7 @@ import java.io.Serializable;
  */
 @Configuration
 @Conditional(MyCondition.class)
-public class Config {
+public class ConfigCondition {
     @Bean
     public Serializable createSerializable()
     {
