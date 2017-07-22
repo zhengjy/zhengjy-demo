@@ -11,7 +11,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * 当其中一个线程找到数据后，立即返回结果即可。
  * Created by zhengjy on 2017/7/4.
  */
-public class ParallelSearch {
+public class 并行搜索 {
 
     static int arr[];
     static ExecutorService pool = Executors.newCachedThreadPool();
