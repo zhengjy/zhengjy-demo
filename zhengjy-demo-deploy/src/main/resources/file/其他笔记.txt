@@ -388,10 +388,27 @@ AppClassLoader是加载classpath中指定的jar包
 
 
 
+ConcurrentHashMap
+
+	ConcurrentHash是线程安全的哈希表，是通过“锁分段”来实现的。ConcurrentHashMap中包括了“Segment(锁分段)数组”，每个Segment就是一个哈希表，而且是可重入的互斥锁。
+	一、Segment是哈希表表现在Segment包含了"HashEntry数组"，而"HashEntry数组"中每个HashEntry元素是一个单向链表。即Segment是通过链式哈希表。
+	二、Segment继承于ReentrantLock，ReentrantLock就是可重入的互斥锁。
+		对应ConcurrentHashMap的添加、删除开始前，线程都会获取Segment的互斥锁：操作完毕后，才会释放。而对于读取操作，是通过volatile实现的，hashEntry数组是volatile类型的，
+	1、ConcurrentHashMap继承于AbstractMap抽象类，实现ConcurrentMap
+	2、Segment是ConcurrentHashMap中的内部类，它就是ConcurrentHashMap中的“锁分段”对应的存储结构。ConcurrentHashMap与Segment是组合关系，1个ConcurrentHashMap对象包含若干个Segment对象。
+	3、Segment继承与ReentrantLock类，所以Segment本质是一个可重入的互斥锁
+	4、HashEntry也是ConcurrentHashMap的内部类，是单向链表节点，存储着key-value键值对。Segment与HashEntry是组合关系，Segment类中存在HashEntry数组成员，HashEntry数组中的每个HashEntry就是
+	   一个单向链表。
+	5、对于多线程访问对一个“哈希表对象”竞争资源，Hashtable是通过一把锁来控制并发；而ConcurrentHashMap则将哈希表分成许多片段，对于每个片段分别通过一个互斥锁来控制并发。
 
 
 
 
+
+linux load
+	在Linux进程中，进程分为三种，一种是阻塞的进程、一种是可运行的进程、一种是正在运行的进程
+	进程可运行状态时，它处在一个运行队列中，与其他可运行进程争夺CPU时间，系统的load是指正在运行和准备好运行的进程的总数。如现在系统有2个正在运行的进程，3个可运行的进程，那么系统的load
+	就是5。
 
 
 
