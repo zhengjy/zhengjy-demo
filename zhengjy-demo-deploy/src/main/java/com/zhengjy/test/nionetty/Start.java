@@ -1,5 +1,6 @@
 package com.zhengjy.test.nionetty;
 
+import com.zhengjy.tag.User;
 import com.zhengjy.test.nionetty.pool.NioSelectorRunnablePool;
 
 import java.net.InetSocketAddress;
@@ -22,7 +23,8 @@ public class Start {
 		
 		//绑定端口
 		bootstrap.bind(new InetSocketAddress(10101));
-		
+
+
 		System.out.println("start");
 	}
 

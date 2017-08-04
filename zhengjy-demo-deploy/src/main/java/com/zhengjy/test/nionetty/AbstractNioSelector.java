@@ -77,7 +77,6 @@ public abstract class AbstractNioSelector implements Runnable {
 				wakenUp.set(false);
 
 				select(selector);
-
 				processTaskQueue();
 
 				process(selector);
