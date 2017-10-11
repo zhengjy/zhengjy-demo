@@ -490,6 +490,48 @@ aof
 	
 	no-appendfsync-on-rewrite yes #正在导出rdb快照的过程要不要停止aof
 	
+nginx 
+	
+	
+	gzip 
+		gzip on|off; #是否开启gzip
+		gzip_buffers 32 4K|16 8K #缓冲(压缩在内存中缓冲几块，每块多大，推荐 32 4)
+		gzip_comp_level[1-9] 压缩级别(级别越高,压的越小，越浪费CPU资源)，推荐6
+		gzip_disable 正则匹配UA  什么样的URL不进行gzip
+		gzip_min_length 200 开始压缩的最小长度 推荐200
+		gzip_proxied 设置请求代理服务器，该如何缓冲内容
+		gzip_type text/plain application/xml  那些类型文件进行压缩 如txt,xml,html
+		gzip_vary on|off 是否传输gzip压缩标志
+
+	
+	正则匹配
+		localtion ~ image { //url包含 image
+		}
+
+		localtion ~* image { //不区分大小写
+		}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	
 	
 
