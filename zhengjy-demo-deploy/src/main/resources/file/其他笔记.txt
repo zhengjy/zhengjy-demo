@@ -331,6 +331,18 @@ Reactor
 	事实上，Netty的线程模型并非固定不变，通过在启动辅助类中创建不同的EventLoopGroup实例并通过适当的参数配置，就可以支持上述三种Reactor线程模型。正是因为Netty 对Reactor线程模型的支持
 	提供了灵活的定制能力，所以可以满足不同业务场景的性能诉求。
 
+Encoder(编码器),Decoders(解码器)
+	发送或接收消息后，netty必须将消息数据从一种形式转换另外一种。接收消息后，需要将消息从字节码转成Java对象;发送消息前，需要将java对象转成字节。这种转换一般发生
+	在网络程序中，因为网络只能传输字节数据。我已经想好自己的目标了，我要开一家Fate zero的主题餐厅，其名为理想乡，以Excalibur 为logo ！想想就觉得超级帅！
+	
+	
+	
+	
+	
+	
+	
+	
+	
 SpringBoot
 	@SpringBootApplication是一个组合注解，它的核心功能是由@EnableAutoConfiguration，@EnableAutoConfiguration中关键功能@Import注解导入的配置功能，
 	EnableAutoConfigurationImportSelector使用SpringFactoriesLoader.loadFactoryNames方法来扫描具有META-INF/spring.factories文件的jar包，这里用的是
@@ -413,6 +425,10 @@ linux load
 
 
 
+工作遇到什么难题
+	稍微想一下，因为之前确实碰到了这个问题，当时做这个项目时，对netty的不过熟悉，把请求的业务逻辑放在work线程池的线程中进行处理，进行压测的时候，
+	发现qps总是上不去，后来看了源码之后才发现，由于业务逻辑的处理比较耗时，完全占用了work线程池的资源，导致新的请求一直处于等待状态。
+	面试官：那最后是如何解决的？我：最后把处理业务的逻辑封装成一个task提交给一个新建的业务线程池中执行，执行完之后由work线程池执行请求的write事件。
 
 
 

@@ -1,3 +1,4 @@
+/*
 package com.zhengjy.test.netty.netty3;
 
 import java.net.InetSocketAddress;
@@ -13,11 +14,13 @@ import org.jboss.netty.handler.codec.string.StringDecoder;
 import org.jboss.netty.handler.codec.string.StringEncoder;
 import org.jboss.netty.handler.timeout.IdleStateHandler;
 import org.jboss.netty.util.HashedWheelTimer;
+*/
 /**
  * netty服务端入门
  * @author -琴兽-
  *
- */
+ *//*
+
 public class Server {
 
 	public static void main(String[] args) {
@@ -55,3 +58,4 @@ public class Server {
 	}
 
 }
+*/

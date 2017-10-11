@@ -22,4 +22,11 @@ public class TestController {
         System.out.println(str);
         return  new ModelAndView("/index").addObject("t",ts.getName());
     }
+
+    @RequestMapping("/index3")
+    public String index2(String str, String str2){
+        int i = 1/2;
+        System.out.println(str);
+        return  "/index";
+    }
 }
