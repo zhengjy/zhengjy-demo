@@ -415,8 +415,67 @@ linux load
 
 
 
+redis
+	redis集群
+		reids集群没有入口，连接任何节点都可以，内部的节点都是互相通信的。
+		如何检测节点健康状态？投票容错，如超过半数节点认为某个节点挂了，那他就是挂了。b发现a节点没有调通，发一个广播通知其他节点询问a节点是否挂了，
+		，挂了之后，会将a的从节点替换成主节点。
+		什么时候节点挂了？
+			所有的redis节点彼此互联(ping-pong机制),内部使用二进制协议优化传输速度和带宽。
+			节点的fail是通过集群中超过半数的节点检测失效才生效
+			客户端与redis节点直连，不需要中间proxy,客户端不需要连接集群所有节点，连接集群中任何一个可用节点即可
+			集群中把所有的物理节点映射到[0-16383]solt上
+			reids集群中内置了16384个哈希槽，当需要redis集群中放置一个key-value时，redis先对key使用crc16算法算出一个结果，然后把结果对16384求余数
+			，这样每个key都会对应一个编码0-16383之间的哈希槽，redis会根据节点数量大致均等的哈希槽映射不同的节点
+			
+			如果有一个节点挂了，集群就挂了
+			
+redis主从复制
+	主要是通过master server持久化rdb文件实现的。master server 先dump出内存快照文件，然后将rdb文件传送给slave server，slave server根据rdb文件重新
+	建立内存表。
+	
+完全复制过程
+	1、slave server启动连接到master server之后，slave server主动发送sync命令给master server
+	2、master server接受sync命令后，判断是否有正在内存快照的子进程，如果有则等待其结束，否则fork一个子进程，子进程把内存数据保存为文件，并发送slave server
+	3、master server子进程进程做内存快照时，父进程可以继续接收chient端请求写数据，此时父进程将新写的数据放到待发送缓存队列中
+	4、slave server接收内存快照文件后，清空内存数据，根据接收的快照文件，重建内存表数据结构
+	5、master server把快照文件发送完成后，发送缓存队列中保存的子进程快照期间改变的数据给slave server，slave server做相同的处理，保证数据一致性
+	6、master server后续接收的数据，都会通过第一步建立的连接，把数据发送给slave server
+部分复制过程
+	1、主服务器的复制偏移量和从服务器的复制偏移量
+	2、主服务器的复制积压缓冲区，缓冲区是一个固定大小的先进先出队列
+	3、服务器的运行Id
+	是否适用部分同步的检查方法：
+		如果从服务器记录的主服务器id和当前连接的主服务器的id相同，并且从服务器记录的偏移量所指定的数据仍然保存在主服务器的复制流缓存区里面，那么主服务器会向
+		从服务器发送断线时缺失的那部分数据，然后复制工作可以开始了。
+		
+	
+rdb快照持久化
+	每隔n分钟或n次些操作后，从内存dump数据形成rdb文件，压缩放在备份目录。
+	save 900 1 #刷新快照到硬盘中，必须满足两者要求才会触发，即900秒之后至少有1个关键字变化。
+	save 300 10 #必须300秒有10个关键字变化。
+	save 60 10000 #必须60秒有10000个关键字变化。
+	stop-writes-on-bgsave-error yes #后台存储错误停止写。
+	rdbcompression yes #使用lzf压缩rdb文件。
+	rdbchecksum yes #存储和加载rdb文件时校验。
+	dbfilename dump.rdb #设置文件名。
+	dir ./ #设置工作目录，rdb会写入该目录。
 
-
+aof
+	aof后台执行的方式，fork 一个子进程，主进程仍进行服务，子进程执行 AOF 持久化，数据被 dump 到磁盘上。与 RDB 不同的是，后台子进程持久化过程中，
+	主进程会记录期间的所有数据变更（主进程还在服务），并存储在 server.aof_rewrite_buf_blocks 中；后台子进程结束后，redis 更新缓存追加到 AOF 
+	文件中，是 RDB 持久化所不具备的。
+	
+	appendonly yes #是否开启 aof日志功能
+	
+	appendfsync always #没1个命令都立即同步到aof  （安全，速度慢）
+	appendfsync everysec #择中方案，每秒写一次
+	appendfsync no #写入操作交给操作系统，由操作系统判定缓存大小写入aof （同步率低，速度快）
+	
+	no-appendfsync-on-rewrite yes #正在导出rdb快照的过程要不要停止aof
+	
+	
+	
 
 
 
