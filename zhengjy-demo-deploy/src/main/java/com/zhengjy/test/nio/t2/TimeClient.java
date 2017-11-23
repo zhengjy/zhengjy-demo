@@ -7,6 +7,7 @@ import java.io.IOException;
  */
 public class TimeClient {
     public static void main(String[] args) throws IOException {
+//        new Thread(new TimeClienthandle("118.31.70.81",8088),"timeClient-01").start();
         new Thread(new TimeClienthandle("127.0.0.1",8088),"timeClient-01").start();
     }
 }

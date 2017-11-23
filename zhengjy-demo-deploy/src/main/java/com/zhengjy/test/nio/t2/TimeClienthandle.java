@@ -46,9 +46,11 @@ public class TimeClienthandle implements Runnable{
         try {
             while (!stop){
                 selector.select();
-                Collection selectionKeys = selector.keys();
-                selectionKeys.stream().filter(v -> {
-                    SelectionKey key = null;
+                Iterator<SelectionKey> ite = selector.selectedKeys().iterator();
+                SelectionKey key;
+                while (ite.hasNext()) {
+                    key = ite.next();
+                    ite.remove();
                     try{
                         //当有就绪的Channel时
                         handleInput(key);
@@ -64,8 +66,7 @@ public class TimeClienthandle implements Runnable{
                             }
                         }
                     }
-                    return false;
-                });
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -123,7 +124,7 @@ public class TimeClienthandle implements Runnable{
 
     public void doConnent() throws IOException {
         //如果连接成功，则将SocketChannel注册到多路复用器selector上，注册SelectionKey.OP_READ
-        if (socketChannel.connect(new InetSocketAddress("127.0.0.1",8088))){
+        if (socketChannel.connect(new InetSocketAddress(host,port))){
             socketChannel.register(selector,SelectionKey.OP_READ);
             doWrite(socketChannel);
          //如果没有直接连成功，则说明服务器没有返回TCP握手应答消息，但这并不代表失败，需要将SocketChannel注册到多路复用器

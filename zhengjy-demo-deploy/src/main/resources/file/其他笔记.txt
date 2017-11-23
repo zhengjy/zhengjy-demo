@@ -265,6 +265,12 @@ EventLoopGroup和一个Channel关联一个单一的EventLoop,Netty中的EventLoo
 ，Netty将这个Channel绑定到一个EventLoop，在Channel的生命周期内总是被绑定到一个EventLoop，在Netty IO操作中，你的
 程序不需要同步，因为一个指定通道的所有IO始终由同一个线程来执行。
 
+
+EventLoopGroup:
+	EventLoopGroup包含多个EventLoop，每个Channel绑定一个EventLoop不会被改变，因为EventLoopGroup包含少量的EventLoop的Channels，
+	很多Channel会共享同一个EventLoop。这意味着一个Channel保持EventLoop繁忙会禁止其他Channel绑定到相同的EventLoop。EventLoop是
+	一个事件循环线程，而EventLoopGroup是一个事件集合。
+
 Bootstrap：
 	引导是Netty中配置程序的过程，当你需要连接客户端或服务器绑定指定端口时需要使用bootstrap。
 	bootstrap有两种类型，一种是用于客户端的Bootstrap，一种用于服务端的ServerBootstrap。
@@ -286,6 +292,13 @@ ChannelInitializer:
 ByteBuf：
 	ByteBuf有两个部分：一个用于读，一个用于写。可以按照顺序的读取数据，并且可以跳到开始重新读一遍。
 	写入数据到ByteBuf后，写入索引是增加的字节数量。开启读字节后，读取索引增加。
+
+ChannelHandler：
+	为了使数据从一端到达另一端，一个或多个CHannelHandler将以某种方式操作数据。这些CHannelHandler会在程序的引导
+	阶段被添加ChannelPipeline中，并且被添加的顺序将决定处理数据的顺序。ChannelPipeline的作用是用来管理ChannelHandler
+	的一个容器，每个ChannelHandler处理各自的数据，处理完成后将装的数据放到ChannelPipeline中交个下一个ChannelHandler
+	继续处理，知道最后一个ChannelHandler处理完成
+	
 Channel：
 	ChannelPipeline：
 		ChannelPipeline是ChannelHandler实例的列表，用于处理或截获通道的接收和发送数据。
@@ -467,6 +480,8 @@ redis主从复制
 		
 	
 rdb快照持久化
+	rdb执行持久化是由子进程执行保存操作，该命令不会阻塞服务器。rdb文件是一个经过压缩的二进制文件。
+
 	每隔n分钟或n次些操作后，从内存dump数据形成rdb文件，压缩放在备份目录。
 	save 900 1 #刷新快照到硬盘中，必须满足两者要求才会触发，即900秒之后至少有1个关键字变化。
 	save 300 10 #必须300秒有10个关键字变化。
@@ -481,6 +496,15 @@ aof
 	aof后台执行的方式，fork 一个子进程，主进程仍进行服务，子进程执行 AOF 持久化，数据被 dump 到磁盘上。与 RDB 不同的是，后台子进程持久化过程中，
 	主进程会记录期间的所有数据变更（主进程还在服务），并存储在 server.aof_rewrite_buf_blocks 中；后台子进程结束后，redis 更新缓存追加到 AOF 
 	文件中，是 RDB 持久化所不具备的。
+	
+	执行操作命令请求会保存到aof缓冲区里面，定期写入并同步aof文件。服务器只要载入并重新执行保证在aof文件中的命令，就可以还
+	原数据库本来的状态。再还原会对aof文件重写，产生一个新的aof文件，这个新的aof文件和原有的aof文件保存的数据库状态一样，
+	但体积更小。
+	
+	
+	在执行重写命令时，redis服务器会维护一个aof重写缓冲区，该缓冲区会在子进程创建新aof文件期间，记录服务器执行的所有写命令
+	。当子进程完成创建新aof文件的工作后，服务器会将重写缓冲区中的所有内容追加到新aof文件末尾，使新旧两个aof文件所保存的数据库
+	状态一致。最后，服务器用新的aof文件替换旧的aof文件，来完成aof文件重写操作。
 	
 	appendonly yes #是否开启 aof日志功能
 	

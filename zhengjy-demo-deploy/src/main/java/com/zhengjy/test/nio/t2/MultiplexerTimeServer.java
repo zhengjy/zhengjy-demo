@@ -56,9 +56,12 @@ public class MultiplexerTimeServer implements Runnable {
                 //无论是否有读写事件发生，selector每隔1s都被唤醒、
                 selector.select();
                 //返回SelectionKey集合
-                Collection<SelectionKey> selectionKeys = selector.selectedKeys();
-                for (Iterator it = selectionKeys.iterator();it.hasNext();){
-                    SelectionKey key = (SelectionKey) it.next();
+                Iterator<SelectionKey> ite = selector.selectedKeys().iterator();
+                SelectionKey key;
+                //通过对就绪的channel集合进行迭代，可以通过网络的异步读写
+                while (ite.hasNext()) {
+                    key = ite.next();
+                    ite.remove();
                     try{
                         handleInput(key);
                     }catch (Exception e){
@@ -74,24 +77,7 @@ public class MultiplexerTimeServer implements Runnable {
                         }
                     }
                 }
-                //通过对就绪的channel集合进行迭代，可以通过网络的异步读写
-                selectionKeys.stream().filter( key ->{
-                    try{
-                        handleInput(key);
-                    }catch (Exception e){
-                        if(key != null){
-                            key.cancel();
-                            if(key.channel() != null){
-                                try {
-                                    key.channel().close();
-                                } catch (IOException e1) {
-                                    e1.printStackTrace();
-                                }
-                            }
-                        }
-                    }
-                    return true;
-                });
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
