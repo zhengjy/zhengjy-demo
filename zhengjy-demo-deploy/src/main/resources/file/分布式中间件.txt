@@ -125,6 +125,7 @@ dubbo源码解析：
 		转为Exporter发生再DubboProtocol类的exportf方法，它主要是打开socket监听服务，并接收客户端发来的各种请求。
 	
 	服务消费者消费一个服务的详细过程：
+		首先ReferenceConfig类的init方法调用Protocol的refer方法生成Invoker实例，接下来Invoker转换位客户端需要的接口如(HellpWorld)
 		
 
 
