@@ -1,4 +1,3 @@
-/*
 package com.zhengjy.test.netty.netty3;
 
 import java.net.InetSocketAddress;
@@ -14,12 +13,11 @@ import org.jboss.netty.handler.codec.string.StringDecoder;
 import org.jboss.netty.handler.codec.string.StringEncoder;
 import org.jboss.netty.handler.timeout.IdleStateHandler;
 import org.jboss.netty.util.HashedWheelTimer;
-*/
 /**
  * netty服务端入门
  * @author -琴兽-
  *
- *//*
+ */
 
 public class Server {
 
@@ -27,18 +25,18 @@ public class Server {
 
 		//服务类
 		ServerBootstrap bootstrap = new ServerBootstrap();
-		
+
 		//boss线程监听端口，worker线程负责数据读写
 		ExecutorService boss = Executors.newCachedThreadPool();
 		ExecutorService worker = Executors.newCachedThreadPool();
-		
+
 		//设置niosocket工厂
 		bootstrap.setFactory(new NioServerSocketChannelFactory(boss, worker));
-		
+
 		final HashedWheelTimer hashedWheelTimer = new HashedWheelTimer();
 		//设置管道的工厂
 		bootstrap.setPipelineFactory(new ChannelPipelineFactory() {
-			
+
 			@Override
 			public ChannelPipeline getPipeline() throws Exception {
 
@@ -50,12 +48,11 @@ public class Server {
 				return pipeline;
 			}
 		});
-		
+
 		bootstrap.bind(new InetSocketAddress(10101));
-		
+
 		System.out.println("start!!!");
-		
+
 	}
 
 }
-*/

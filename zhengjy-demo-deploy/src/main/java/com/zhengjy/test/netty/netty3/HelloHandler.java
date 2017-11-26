@@ -1,4 +1,4 @@
-/*
+
 package com.zhengjy.test.netty.netty3;
 
 import org.jboss.netty.channel.ChannelEvent;
@@ -38,4 +38,4 @@ public class HelloHandler extends SimpleChannelHandler {
 	}
 
 }
-*/
+

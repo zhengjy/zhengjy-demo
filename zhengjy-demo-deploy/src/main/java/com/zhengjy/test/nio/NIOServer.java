@@ -68,6 +68,19 @@ public class NIOServer {
                     // 获得了可读的事件
                 } else if (key.isReadable()) {
                     read(key);
+                }else if(key.isWritable()){
+                    SocketChannel socketChanne = (SocketChannel) key.channel();
+                    ByteBuffer buffer = (ByteBuffer) key.attachment();
+                    if(!buffer.hasRemaining()){
+                        //用下一行重新填充缓冲区
+                        buffer.rewind();
+                        //得到上一行的首字符
+                        int first = buffer.get();
+                        //准备改写缓冲区中的数据
+                        buffer.rewind();
+                        //寻找rotation中新的首字符位置
+                    }
+
                 }
 
             }
