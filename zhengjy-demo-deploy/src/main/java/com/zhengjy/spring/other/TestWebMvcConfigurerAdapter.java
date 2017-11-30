@@ -1,9 +1,11 @@
 package com.zhengjy.spring.other;
 
+import com.zhengjy.spring.spring_mvc_return_val.MyHandlerMethodReturnValueHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ResourceUtils;
+import org.springframework.web.method.support.HandlerMethodReturnValueHandler;
 import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
@@ -58,5 +60,17 @@ public class TestWebMvcConfigurerAdapter extends WebMvcConfigurerAdapter {
     @Bean
     public MyMessageConverter converter(){
         return new MyMessageConverter();
+    }
+
+
+
+    @Bean
+    public MyHandlerMethodReturnValueHandler MyHandlerMethodReturnValueHandler(){
+        MyHandlerMethodReturnValueHandler formatJsonReturnValueHandler=new MyHandlerMethodReturnValueHandler();
+        return formatJsonReturnValueHandler;
+    }
+    @Override
+    public void addReturnValueHandlers(List<HandlerMethodReturnValueHandler> returnValueHandlers) {
+        returnValueHandlers.add(MyHandlerMethodReturnValueHandler());
     }
 }
