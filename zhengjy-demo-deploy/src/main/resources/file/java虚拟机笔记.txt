@@ -300,12 +300,15 @@ java -Xmx3550m -Xms3550m -Xmn2g -Xss128k -XX:NewRatio=4 -XX:SurvivorRatio=4 -XX:
 	-XX:NewRatio=4：设置年轻代（包括Eden和两个Survivor区）与年老代的比值（除去持久化）。设置为4，则年轻代与年老代所占值为
 
 	-XX:NewSize=N :设置新生代空间的初始大小。
-	--XX:NewMaxSize=N 设置新生代空间的最大大小。
+	-XX:NewMaxSize=N 设置新生代空间的最大大小。
 
 	新生代占堆的3/8，幸存代占新生代的1/10  1个Eden区和2个Survivor区（分别叫from和to）。默认比例为8：1
 
 	–XX:PermSize=64m //最小堆大小
     –XX:MaxPermSize=128m //最大堆大小
+	
+	-XX:MetaspaceSize=N 元空间大小
+	-XX:MaxMetaspaceSize=N 元空间最大大小
 
 	-XX:MaxTenuringThreshold=1 设置进入老年代的阀值，如果是1，就会经历过Survivor1次就会进入老年代。
 	-XX:PretenureSizeThreeshold=1024 设置新生代分配的内存大于1024k就直接分配到老年代区。

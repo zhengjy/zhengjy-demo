@@ -1,5 +1,8 @@
 package com.zhengjy;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by zhengjy on 2017/2/22.
  */
@@ -32,4 +35,12 @@ public class UserVO {
     public void setAge(Integer age) {
         this.age = age;
     }
+
+    public static void main(String[] args) {
+        List<String> list = new ArrayList<>();
+        list.add("ssss");
+        list.add("ssss1");
+        list.add("ssss");
+    }
+
 }

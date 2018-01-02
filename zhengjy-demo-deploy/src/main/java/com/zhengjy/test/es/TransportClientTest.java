@@ -21,8 +21,8 @@ public class TransportClientTest {
         TransportClient transportClient = new TransportClient(esSetting);
 
         // 添加连接地址
-        TransportAddress address = new InetSocketTransportAddress("192.168.241.138", 9200);
-        TransportAddress address2 = new InetSocketTransportAddress("192.168.241.135", 9200);
+        TransportAddress address = new InetSocketTransportAddress("118.31.70.81", 9200);
+        TransportAddress address2 = new InetSocketTransportAddress("118.31.43.85", 9200);
         transportClient.addTransportAddress(address);
         transportClient.addTransportAddress(address2);
     }
