@@ -41,10 +41,11 @@ public class ForkJoinTest {
     }
 
     public static void main(String[] args) {
-        d = createArrayOfRandomDubles();
+//        d = createArrayOfRandomDubles();
     }
 
     private static double[] createArrayOfRandomDubles() {
+        return null;
     }
 }
 

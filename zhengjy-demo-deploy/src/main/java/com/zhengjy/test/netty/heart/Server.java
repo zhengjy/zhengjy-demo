@@ -42,7 +42,7 @@ public class Server {
 					ch.pipeline().addLast(new IdleStateHandler(5, 5, 10));
 					ch.pipeline().addLast(new StringDecoder());
 					ch.pipeline().addLast(new StringEncoder());
-					ch.pipeline().addLast(new ServerHandler());
+//					ch.pipeline().addLast(new ServerHandler());
 				}
 			});
 			

@@ -77,11 +77,7 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-config</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
+
         <!--<dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
@@ -103,11 +99,11 @@
         </dependency>-->
 
         <!-- https://mvnrepository.com/artifact/io.netty/netty-all -->
-        <dependency>
+    <!--    <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-all</artifactId>
             <version>5.0.0.Alpha2</version>
-        </dependency>
+        </dependency>-->
         <!-- https://mvnrepository.com/artifact/org.jboss.marshalling/jboss-marshalling
             传输序列化
         -->
@@ -144,6 +140,13 @@
             <groupId>com.alibaba.rocketmq</groupId>
             <artifactId>rocketmq-client</artifactId>
             <version>3.2.6</version>
+
+            <exclusions>
+                <exclusion>
+                    <groupId>io.netty</groupId>
+                    <artifactId>netty-all</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
@@ -169,20 +172,29 @@
             <version>5.4.0</version>
         </dependency>
         <dependency>
-            <groupId>org.elasticsearch</groupId>
+            <groupId>org.elasticsearch.client</groupId>
             <artifactId>transport</artifactId>
             <version>5.4.0</version>
+
+
         </dependency>
         <dependency>
-            <groupId>org.elasticsearch</groupId>
+            <groupId>org.elasticsearch.client</groupId>
             <artifactId>x-pack-transport</artifactId>
             <version>5.4.0</version>
+
         </dependency>
 
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-to-slf4j</artifactId>
             <version>2.9.1</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-log4j12</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
@@ -191,6 +203,11 @@
             <version>2.7</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>2.7</version>
+        </dependency>
 
         <!-- habse -->
         <dependency>
@@ -201,6 +218,15 @@
                 <exclusion>
                     <groupId>com.google.guava</groupId>
                     <artifactId>guava</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-log4j12</artifactId>
+                </exclusion>
+
+                <exclusion>
+                    <groupId>io.netty</groupId>
+                    <artifactId>netty</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -215,9 +241,9 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <executions>
                     <execution>
-                        <goals>
+                        <!--<goals>
                             <goal>repackage</goal>
-                        </goals>
+                        </goals>-->
                         <configuration>
                             <mainClass>com.zhengjy.Application</mainClass>
                             <!--<layout>ZIP</layout>-->
