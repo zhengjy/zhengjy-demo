@@ -28,10 +28,14 @@ import static org.elasticsearch.node.NodeBuilder.nodeBuilder;
 public class ESTest {
     public static void main(String[] args) throws IOException {
         Settings settings = ImmutableSettings.settingsBuilder()
-                .put("cluster.name", "elasticsearch").build();
+                .put("cluster.name", "es-cluster")
+                .put("xpack.security.user","elastic:changeme")
+//                .put("client.transport.sniff", true)
+                .build();
         Client client = new TransportClient(settings)
-                .addTransportAddress(new InetSocketTransportAddress("192.168.241.138", 9300))
-                .addTransportAddress(new InetSocketTransportAddress("192.168.241.135", 9300));
+
+//                .addTransportAddress(new InetSocketTransportAddress("118.31.70.81", 9300))
+                .addTransportAddress(new InetSocketTransportAddress("118.31.43.85", 9300));
 
 
         String json = "{" +

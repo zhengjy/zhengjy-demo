@@ -7,7 +7,7 @@ public class CyclicBarrierRun implements Runnable{
 	CyclicBarrier cyclicBarrier2 = null;
 	
 	public CyclicBarrierRun(CyclicBarrier cyclicBarrier1,CyclicBarrier cyclicBarrier2){
-		this.cyclicBarrier1 = cyclicBarrier2;
+		this.cyclicBarrier1 = cyclicBarrier1;
 		this.cyclicBarrier2 = cyclicBarrier2;
 	}
 

@@ -56,6 +56,7 @@ public class MapUtilExample {
         map.forEach((id, val) -> System.out.println(val));
     }
 
+
     /**
      * 使用更新后的map进行compute——->重映射
      */
