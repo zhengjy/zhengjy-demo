@@ -23,13 +23,14 @@ public class SpringTest2 {
 
         BeanFactory bf = new XmlBeanFactory(new ClassPathResource("spring/spring-config.xml"));
 //        GetBeanTest gt = (GetBeanTest) bf.getBean("getBeanTest");
+//        gt.getBean().showMe();
 //        User u = (User) bf.getBean("user");
 //        User u2 = (User) bf.getBean("user");
         User2 u2 = (User2) bf.getBean("user2");
 //        Car car = (Car) bf.getBean("car");
 //        CarFactoryBean cf = (CarFactoryBean) bf.getBean("&car");
-//        Boss boss = (Boss) bf.getBean("boss");
-//        Office office = (Office) bf.getBean("office");
+        Boss boss = (Boss) bf.getBean("boss");
+        Office office = (Office) bf.getBean("office");
 
         /*DemoPublisher publisher = bf.getBean(DemoPublisher.class);
         publisher.publish("hello appliction event");*/
