@@ -194,7 +194,7 @@ public class EsEmployeeTest {
 
         // Get your facet results
         Terms agg1 = sr.getAggregations().get("agg1");
-        Histogram agg2 = sr.getAggregations().get("terms");
+        Histogram agg2 = sr.getAggregations().get("agg1");
 
     }
 

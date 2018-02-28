@@ -3,20 +3,24 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
-         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd"><!-- 启用spring mvc 注解 -->
+         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd" ><!-- 启用spring mvc 注解 -->
 
-    <bean  class="com.zhengjy.spring.User2" id="user2">
+    <bean  class="com.zhengjy.spring.aware.TestAware" id="testAware" />
+
+    <bean  class="com.zhengjy.spring.User2" id="user2" >
         <constructor-arg name="userName" index="0" value="xxxx"/>
         <constructor-arg name="email" index="1" value="xx2"/>
+        <property name="car2" ref="car"/>
     </bean>
 
+    <bean class="com.zhengjy.spring.factory_bean.Car" id="car2"/>
 
     <bean id="car" class="com.zhengjy.spring.factory_bean.CarFactoryBean">
         <property name="carInfo" value="xxx,23,33"/>
     </bean>
 
     <import resource="spring-tag-test.xml"/>
-    <import resource="spring-dubbo.xml"/>
+    <!--<import resource="spring-dubbo.xml"/>-->
     <bean id="fooBar" name="x1,x2,x3"  class="com.zhengjy.spring.news.FooBar">
         <meta key="keys" value="values"/>
     </bean>

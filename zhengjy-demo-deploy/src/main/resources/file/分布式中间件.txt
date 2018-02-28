@@ -19,6 +19,11 @@ dubbo远程调用协议：
 
 启动提供者注册zk,消费者订阅服务，消费者，建立链接，调用接口，将参数序列化传给提供者，提供者反序列化代理执行调用方法，在序列化出去传给消费者，消费者在反序列化。	
 	
+本地暴露和远程暴露	
+	在dubbo中我们一个服务可能既是Provider,又是Consumer,因此就存在他自己调用自己服务的情况,如果再通过网络去访问,那自然是舍近求远,因此他是有本地暴露服务的这个设计.
+	本地暴露是暴露在JVM中,不需要网络通信.
+	远程暴露是将ip,端口等信息暴露给远程客户端,调用时需要网络通信.
+	
 dubbo协议：
 	dubbo缺省协议采用单一长链接和NIO异步通讯，适用于小数据量大并发的调用，以及服务消费者机器数远大于服务提供者机器数的情况。
 	缺省协议，使用基于mina1.1.7+hessian3.2.1的tbremoting交互。
@@ -127,7 +132,16 @@ dubbo源码解析：
 	服务消费者消费一个服务的详细过程：
 		首先ReferenceConfig类的init方法调用Protocol的refer方法生成Invoker实例，接下来Invoker转换位客户端需要的接口如(HellpWorld)
 		
-
+dubbo设计@adaptive注解的原因
+	为什么要设计adaptive？注解在类上和注解在方法上的区别？
+	adaptive设计的目的是为了识别固定已知类和扩展未知类。
+	1.注解在类上：代表人工实现，实现一个装饰类（设计模式中的装饰模式），它主要作用于固定已知类，
+	目前整个系统只有2个，AdaptiveCompiler、AdaptiveExtensionFactory。
+	a.为什么AdaptiveCompiler这个类是固定已知的？因为整个框架仅支持Javassist和JdkCompiler。
+	a.为什么AdaptiveExtensionFactory这个类是固定已知的？因为整个框架仅支持2个objFactory,一个是spi,另一个是spring
+	2.注解在方法上：代表自动生成和编译一个动态的Adpative类，它主要是用于SPI，因为spi的类是不固定、未知的扩展类，所以设计了动态$Adaptive类.
+	例如 Protocol的spi类有 injvm dubbo registry filter listener等等 很多扩展未知类，
+	它设计了Protocol$Adaptive的类，通过ExtensionLoader.getExtensionLoader(Protocol.class).getExtension(spi类);来提取对象
 
 RocketMQ:
 	RocketMQ所有消息都是持久化硬盘的。
