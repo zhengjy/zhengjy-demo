@@ -1,0 +1,174 @@
+线程池的种类，区别和使用场景
+	newCachedThreadPool
+		无限制大小线程池，当有新任务道来，则添加到线程池中，如果池中有空闲线程则使用，没有则创建新线程。可能发生内存溢出。
+	newFixedThreadPool
+		可重用固定线程数的线程池，线程的存活时间是无限的。
+	newSingleThreadExecutor
+		创建只有一个线程的线程池，且线程的存活时间是无限的。
+	newScheduledThreadPool	
+		创建一个固定大小的线程池，线程池内线程存活时间无限制，线程池可以支持定时及周期性任务执行。
+		
+线程池的实现原理和线程的调度过程
+	线程池通过workers来关联线程集合，每个线程在启动后，会执行线程池中的任务；当一个任务执行完后，他会从线程池的阻塞队列中取出
+	任务继续运行。阻塞队列是关联线程池任务的队列，当添加到线程池中的任务超过线程池的容量时，该任务就会进入阻塞队列进行等待。
+	
+	线程池任务执行流程：
+		当线程池小于（核心池大小）corePoolSize时，新提交任务将创建一个新线程执行任务，即使此时线程池中存在空闲线程。
+		当线程池达到corePoolSize时，新提交任务将被放入（线程池的等待队列）workQueue中，等待线程池中任务调度执行
+		当workQueue已满，且（最大池大小）maximumPoolSize>corePoolSize时，新提交任务会创建新线程执行任务
+		当提交任务数超过maximumPoolSize时，新提交任务由RejectedExecutionHandler处理
+		当线程池中超过corePoolSize线程，空闲时间达到keepAliveTime时，关闭空闲线程
+		当设置allowCoreThreadTimeOut(true)时，线程池中corePoolSize线程空闲时间达到keepAliveTime也将关闭
+
+线程池如何调优？
+	首先，我们要确保达到线程上限时，不会引起资源耗尽。这里的资源包括内存（堆和栈）、打开文件句柄数量、TCP连接数、远程数据库连接数和其他
+	有限的资源。特别的，如果线程任务是计算密集型的，CPU核心数量也是资源限制之一，一般情况下线程数量不要超过CPU核心数量。
+
+线程池的最大线程数目根据什么确定？
+
+动态代理的几种方式
+	jdk动态代理，需要实现类通过接口定义业务方法。
+	cglib，通过字节码技术为一个类创建一个子类，并在子类中采用方法拦截的结束拦截索所以父类方法的调用，顺势植入横切逻辑。
+
+HashMap的并发问题
+	Map的扩容,put之后导致get死循环.
+		当Map的容量到阀值之后,首先将原始的Entry[] table 全部转移到新的table中.在这个transfer的过程中,对链表中的每个值重新计算hash然后把这些值放入到对应的散列桶中.因为链表的顺序变成了倒序
+		(这样不用找尾部,可以减少复杂度),在并发的过程中另外一个线程中的链表顺序发生反转,容易形成循环链表.在后面的get操作中变成了无尽循环.
+
+了解LinkedHashMap的应用吗
+	LinkedHashMap是HashMap的子类，LinkedHashMap是一个双向链表，有序的。保持插入顺序的LinkedHashMap 和 保持访问顺序的LinkedHashMap
+	
+反射的原理，反射创建类实例的三种方式是什么
+	Class class1 = Foo.class;
+	Class class2 = foo1.getClass();  
+	Class class3 = Class.forName("com.imooc.reflect.Foo");  
+
+cloneable接口实现原理，浅拷贝or深拷贝
+
+
+Java NIO使用
+
+
+hashtable和hashmap的区别及实现原理，hashmap会问到数组索引，hash碰撞怎么解决
+	实现原理相同，hashtable方法加上了同步关键词。
+	HashMap底层是用一个Entry数组实现的,entry数组有4个属性：key和value是存储的数据,hash是元素key的hash后形成的（映射到数组上的hash）,next是指向下一个元素的索引。
+	hash解决碰撞是采用链表来存储。
+
+arraylist和linkedlist区别及实现原理
+	arrayList底层实现是数组。
+	linkedlist底层实现是双向链表。
+	
+反射中，Class.forName和ClassLoader区别
+	class.forName()前者除了将类的.class文件加载到jvm中之外，还会对类进行解释，执行类中的static块。
+	而classLoader只干一件事情，就是将.class文件加载到jvm中，不会执行static中的内容,只有在newInstance才会去执行static块。
+
+String，Stringbuffer，StringBuilder的区别？
+	简单
+	
+有没有可能2个不相等的对象有相同的hashcode
+
+
+简述NIO的最佳实践，比如netty，mina
+	同步非阻塞的I/O模型，
+	基于管道(channel)和缓冲区(buffer)进行操作，数据总是从通道读取到缓冲区，或者从缓冲区写入到通道。
+
+TreeMap的实现原理
+		
+
+
+
+
+
+
+搭建分布式项目环境，有碰到什么问题，踩过哪些坑。使用过程中有碰到什么问题？
+
+	nginx安装依赖插件
+	nexus依赖jdk7
+
+
+
+
+
+
+熟悉B/S软件架构 基于多层的JavaEE开发体系结构，熟悉面向对象分析与设计。 
+深入了解过HTTP协议、java集合、JUC包、volatile、 (IO、NIO、AIO)、spring、Spring MVC、dubbo、redis、java虚拟机类加载、GC回收、mysql索引。
+了解linux基本命令、shell脚本，tomcat。
+熟练掌握数据库 oracle +oracle pl/sql + mysql。
+独立搭建分布式项目,系统架构和分布式服务器运行环境搭建部署。
+
+
+
+b树是又称平衡多路查找树，他的特点是：如当前是一个5路查找树 m=5，
+	1、树中每个节点至多拥有m个子节点
+	2、当前节点拥有n个子节点，则当前节点的关键词数量是n-1
+	3、叶子节点都在同一层级，用于关键词和指向下一个节点的指针，下一个节点的指针指向的都是null
+	4、都是有序状态
+	
+	b数在mysql中存储的是，每个节点都有索引值和索引行。数据库使用这个的特性是将一个节点的大小设置与磁盘页的大小相同，这样每次载入节点的时候只需要一次io就可以载入完成。
+	
+	innodb的实现是使用b+树 
+		
+		
+
+JUC下CAS机制，ReentrantLock实现并发安全机制，
+	A：旧值，B：内存中的值，C：要set的值，如A和B相等则set C,否则什么也不做
+	
+如当时是一个线程，调用CAS机制，此时是满足A（0）和B（0）相等的。则set C（1），则拿到这把锁。
+
+如第二个线程进入，调用CAS机制，无法满足A（0）和B（1）相等，则将当前线程放到CLH队列末尾且阻塞当前线程。队列是有一个自旋机制，比较当前线程和CLH队列头部线程相等。
+	如果队列中某个线程处于阻塞状态被中断，则移除队列。
+	
+ReentrantLock实现并发安全机制
+	A线程 lock() -> 获取队列是否为空，为空表示第一次获取锁-> set锁为A线程  -> 
+	B线程 lock() -> B线程获取锁，获取锁失败 -> 将B线程加入到队列尾部 -> 阻塞B线程 ->自旋机制，比较B线程是否和CLH队列表头相等 -> A线程释放 -> B线程和队列表头相等 set锁为B线程
+
+
+dubbo
+	dubbo SPI是对jdk的一种扩展，他是一种动态替换发现机制，如某个接口需要动态时给他添加实现，只需要在接口打上spi注解即可。
+
+	ExtensionLoader单例的，每一个扩展接口都有一个El，放入map，key是class，value是 EL。如获取当前系统使用的是zk注册中心，传入Register class，
+	得到Register扩展的适配器接口（动态生成个适配器），EL有一个成员变量map，存放当前扩展的所有实现，所有的实现是从META-INF/dubbo/文件获取的
+	再从这个成员变量中获取具体的扩展实现，即可拿到具体扩展实现。dubbo对扩展还做了一层wapper包装实现了aop的功能。
+	
+	提供者启动：
+		1、dubbo扩展了spring标签，每一个服务提供者service标签对应一个ServiceConfig实例，ServiceConfig方法export初始化时，会将bean对象转换为url
+		格式，将所有bean属性转换成url参数。
+		2、再将对外提供接口的实现类转生成一个代理对象，将代理对象放入invoke对象返回。
+		3、通过invoke转换export，调用DubboProtocol打开socket监听、注册到zk中、监听zk节点，构建Export对象返回
+		
+	调用者启动和调用	
+		消费者的启动是ReferenceCongfig，通过init方法对每个消费者创建一个代理对象，创建过程注册到注册中心、监听注册中心、连接服务端的地址，然后返回
+		一个代理对象，真正调用的是这个代理对象。
+		调用时执行代理对象，将参数序列化然后通过netty通信调用提供者，提供者反序列化执行对应的方法，将返回结果序列化出去，消费者获取返回结果。
+
+
+秒杀设计
+	系统架构
+秒杀系统独立部署，独立域名，通过userid，来一致性hash分订单表
+	用户层
+页面（经压力测试页面流量太大）使用cdn缓存，点击后按钮灰显、验证码
+	web层
+nginx做限流，对同一个ip连接数、并发数进行限制。
+	服务层
+		在过滤器层
+			0、验证缓存库存是否库存不足。
+			1、限流（漏桶算法），根据系统的承载、商品库存做限流（使用Semaphore），超过承受能力降级排队页面。	
+			2、将请求用户放到缓存中（setnx），校验是否同一个用户请求2次避免重复下单请求。
+			3、将请求用户总数放到缓冲中，校验总数大于等于商品总数返回已结束。
+		需要查询表的信息都放到缓存中。
+		验证条件是否满足下单条件，验证通过，（生成处理中状态订单返回、扣缓存库存decr）
+			异步消息处理其他逻辑（请求开发者扣积分、自己库扣积分、扣数据库库存（采用乐观锁）），处理完成更新状态为成功
+
+			
+			
+借鉴成熟框架里面的功能，dubbo的优雅停机，系统重启时会导致大量的报错信息，因为依赖的中间件无法保证		
+
+
+
+		
+		
+zookeeper服务提供者能实现失效踢出是根据什么原理?
+	ZK 中我们让所有的机其都注册一个临时节点,我们判断一个机器是否可用,我们只需要判断这个节点在ZK中是否存在就可以了,不需要直接去连接需要检查的机器,降低系统的复杂度.
+	
+dubbo中zookeeper做注册中心,如果注册中心集群都挂掉,那发布者和订阅者还能通信吗?
+	zookeeper的信息会缓存到本地作为一个缓存文件,并且转换成properties对象方便使用,调用信息缓存在文件，直接在文件中取，可以不需要ZK.
