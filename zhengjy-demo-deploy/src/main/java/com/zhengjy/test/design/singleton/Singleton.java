@@ -24,20 +24,24 @@ public class Singleton {
 	public static void main(String[] args) {
 		Singleton.createString();
 	}
+
+
+
+
+	public static Singleton Instance = null;
+
+
+
+	public static Singleton getInstance(){
+		if(Instance==null){
+			synchronized (Singleton.class) {
+				if (Instance == null) {
+					Instance = new Singleton();
+				}
+			}
+		}
+		return Instance;
+	}
 }
 
-//	private static Singleton Instance = null;
-//
-//	public Singleton() {
-//	}
-//
-//	public static Singleton getInstance(){
-//		if(Instance==null){
-//			synchronized (Singleton.class) {
-//				if (Instance == null) {
-//					Instance = new Singleton();
-//				}
-//			}
-//		}
-//		return Instance;
-//	}
+
