@@ -21,5 +21,8 @@ public class Test {
         int[] arr = {0,1,7,2,10,5,11,12};
         //1+11,3+9,5+7,9+3，0+12,11+1
         num(arr,12);
+
+
+        System.out.println(8%4);
     }
 }
