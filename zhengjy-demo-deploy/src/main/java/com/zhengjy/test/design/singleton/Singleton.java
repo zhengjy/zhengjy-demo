@@ -15,7 +15,12 @@ public class Singleton {
 	public static Singleton getSingleton(){
 		return singleton;
 	}
-	
+
+
+	public Singleton get(){
+		return Child.singleton;
+	}
+
 	//这是模拟单例类扮演其他角色
 	public static void createString(){
 		System.out.println("createString in singleton");
@@ -23,6 +28,13 @@ public class Singleton {
 	
 	public static void main(String[] args) {
 		Singleton.createString();
+	}
+
+
+
+
+	static class Child{
+		static Singleton singleton = new Singleton();
 	}
 
 

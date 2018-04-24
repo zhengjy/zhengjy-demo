@@ -21,32 +21,45 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 public class ReentrantLockTest {
 	public static void main(String[] args) {
-		final int loop = 10000;
-		int threadNum = 10;
-		final SafeReentrantLock reentrantLock= new SafeReentrantLock();
-		final CountDownLatch latch = new CountDownLatch(threadNum);
-		for(int i=0;i<threadNum;i++){
-			final int index =i;
-			new Thread(
+		ReentrantLock s = new ReentrantLock();
+		s.lock();
+		new Thread(
 					new Runnable() {
 						@Override
 						public void run() {
-							for(int i=0;i<loop;i++){
-								reentrantLock.inc();
-							}
-							System.out.println("finished "+index);
-							latch.countDown();
+							s.lock();
+							System.out.println("锁释放------");
+							s.unlock();
 						}
 					}
 			).start();
-		}
-		try {
-			latch.await();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		System.out.println("finished end");
-		System.out.println("SafeReentrantLock："+reentrantLock.get());
+		s.unlock();
+//		final int loop = 10000;
+//		int threadNum = 10;
+//		final SafeReentrantLock reentrantLock= new SafeReentrantLock();
+//		final CountDownLatch latch = new CountDownLatch(threadNum);
+//		for(int i=0;i<threadNum;i++){
+//			final int index =i;
+//			new Thread(
+//					new Runnable() {
+//						@Override
+//						public void run() {
+//							for(int i=0;i<loop;i++){
+//								reentrantLock.inc();
+//							}
+//							System.out.println("finished "+index);
+//							latch.countDown();
+//						}
+//					}
+//			).start();
+//		}
+//		try {
+//			latch.await();
+//		} catch (InterruptedException e) {
+//			e.printStackTrace();
+//		}
+//		System.out.println("finished end");
+//		System.out.println("SafeReentrantLock："+reentrantLock.get());
 	}
 }
 
@@ -60,7 +73,7 @@ class SafeReentrantLock{
 		try{
 			count++;
 		}finally{
-			reentrantLock.unlock();
+//			reentrantLock.unlock();
 		}
 	}
 	
