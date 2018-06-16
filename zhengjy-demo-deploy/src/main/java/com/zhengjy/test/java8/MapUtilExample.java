@@ -1,5 +1,6 @@
 package com.zhengjy.test.java8;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -206,6 +207,8 @@ public class MapUtilExample {
         String newValue2 = map.merge(9, "concat", (value, newValue) -> value.concat(newValue));
         System.out.println(newValue2);
         System.out.println(map.get(9));
+        java.util.List<String> l3 = new ArrayList<>();
+        "".indexOf("");
 
         // k-8值存在为value8->执行merge函数->直接返回"NewMerge8"->newValue为"NewMerge8"
         // 执行put->所以这里输出"NewMerge8"

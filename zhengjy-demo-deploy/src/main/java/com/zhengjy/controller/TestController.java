@@ -17,7 +17,7 @@ public class TestController {
     private Test1 ts;
 
 
-    @RequestMapping("/index2")
+    @RequestMapping("index2")
     public ModelAndView index(String str, String str2){
         System.out.println(str);
         return  new ModelAndView("/index").addObject("t",ts.getName());

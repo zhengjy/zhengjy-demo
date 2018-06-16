@@ -5,10 +5,10 @@ import java.util.*;
 /**
  * Created by zhengjy on 2017/7/17.
  */
-public class List {
+public class J8List {
     private java.util.List<String> stringList = new ArrayList<>();
 
-    public List() {
+    public J8List() {
         init();
     }
 
@@ -164,7 +164,7 @@ public class List {
     }
 
     public static void main(String[] args) {
-        List example = new List();
+        J8List example = new J8List();
 
         example.useStreamFilter();
         example.useStreamMap();

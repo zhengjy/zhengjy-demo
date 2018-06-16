@@ -73,7 +73,7 @@ public class JavaESTest {
         // 通过setting对象指定集群配置信息, 配置的集群名
         Settings settings = Settings.builder().put("cluster.name", "es-cluster") // 设置集群名
                 .put("xpack.security.transport.ssl.enabled", false)
-                .put("xpack.security.user", "elastic:changeme")
+                .put("xpack.security.user", "geely:geely@123")
 //                .put("client.transport.sniff", true) // 开启嗅探 , 开启后会一直连接不上, 原因未知
 //                .put("network.host", "192.168.50.37")
 //                .put("node.client", true)
@@ -84,8 +84,7 @@ public class JavaESTest {
                 .build();
 
         client = new PreBuiltXPackTransportClient(settings)
-                .addTransportAddress(new InetSocketTransportAddress(new InetSocketAddress("118.31.70.81", 9300)))
-                .addTransportAddress(new InetSocketTransportAddress(new InetSocketAddress("118.31.43.85", 9300)));
+                .addTransportAddress(new InetSocketTransportAddress(new InetSocketAddress("10.86.210.23", 9300)));
         // 默认5s
         // 多久打开连接, 默认5s
         System.out.println("success connect");
@@ -156,9 +155,9 @@ public class JavaESTest {
      */
     @Test
     public void test1() throws Exception {
-        XContentBuilder source = createJson4();
+//        XContentBuilder source = createJson4();
         // 存json入索引中
-        IndexResponse response = client.prepareIndex("twitter", "tweet").setSource(source).get();
+        IndexResponse response = client.prepareIndex("automobile_site-1485073708891", "result").get();
 //        // 结果获取
         String index = response.getIndex();
         String type = response.getType();
@@ -197,6 +196,22 @@ public class JavaESTest {
 //                .setFrom(0).setSize(60).setExplain(true)
                 .get();
 
+
+//        SearchResponse searchResponse = client.prepareSearch(index)
+//                .setTypes(type)
+//                .setQuery(QueryBuilders.matchAllQuery()) //查询所有
+//                .setQuery(QueryBuilders.boolQuery()
+//                        .must(QueryBuilders.matchQuery("uquestion", uquestion))//查询uquestion为139的
+//                        .must(QueryBuilders.matchQuery("province", province)))//查询省份为江苏的
+//                //.setQuery(QueryBuilders.matchQuery("uquestion", "12599").operator(Operator.AND)) //根据tom分词查询name,默认or
+//                //.setQuery(QueryBuilders.matchQuery("province", "江苏").operator(Operator.AND)) //根据tom分词查询name,默认or
+//                //.setQuery(QueryBuilders.multiMatchQuery("tom", "name", "age")) //指定查询的字段
+//                //.setQuery(QueryBuilders.queryString("name:to* AND age:[0 TO 19]")) //根据条件查询,支持通配符大于等于0小于等于19
+//                //.setQuery(QueryBuilders.termQuery("name", "tom"))//查询时不分词
+//                .setSearchType(SearchType.QUERY_THEN_FETCH)
+//                .setFrom(0).setSize(10)//分页
+//                //.addSort("age", SortOrder.DESC)//排序
+//                .get();
         System.out.println(response.toString());
     }
 
