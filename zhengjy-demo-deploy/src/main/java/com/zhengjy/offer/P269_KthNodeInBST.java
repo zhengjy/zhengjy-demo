@@ -1,6 +1,8 @@
 package com.zhengjy.offer;
 
 
+import com.zhengjy.offer.tree.TreeNode;
+
 import java.util.Stack;
 
 /**
@@ -9,7 +11,7 @@ import java.util.Stack;
  * 二叉搜索树的第k大节点
  */
 public class P269_KthNodeInBST {
-    public static TreeNode<Integer> kthNode(TreeNode<Integer> root,int k){
+    public static TreeNode<Integer> kthNode(TreeNode<Integer> root, int k){
         //栈顶元素保证一直是cur的父节点
         if(root==null || k<0)
             return null;

@@ -1,7 +1,7 @@
 package com.zhengjy.offer.like;
 
 import com.zhengjy.offer.P60_TraversalOfBinaryTree;
-import com.zhengjy.offer.TreeNode;
+import com.zhengjy.offer.tree.TreeNode;
 
 import java.util.List;
 

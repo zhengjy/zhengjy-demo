@@ -1,37 +1,57 @@
-package com.zhengjy.offer;
+package com.zhengjy.offer.sort;
 
 /**
  * Created by Jiyang.Zheng on 2018/6/16 9:17.
  */
 public class QuickSort {
 
-    private static void quickSort2(int[] arr,int left,int right){
-        if(left>=right){
-            return;
-        }
+//    private static void quickSort2(int arr[],int left,int right){
+//        if (left >= right){
+//            return;
+//        }
+//
+//        int index = partition2(arr,left,right);
+//
+//        quickSort(arr,left,index-1);
+//
+//        quickSort(arr,index+1,right);
+//    }
+//
+//    private static int partition2(int arr[],int left,int right){
+//        int key = arr[left];
+//        while (left < right){
+//            while (arr[right] >= key && right > left){
+//                right--;
+//            }
+//            arr[left] = arr[right];
+//
+//            while (arr[left] <= key && right > left){
+//                left++;
+//            }
+//            arr[right] = arr[left];
+//        }
+//        arr[right] = key;
+//        return right;
+//    }
 
-        int index = partition2(arr,left,right);
-        //左
-        quickSort2(arr,left,index-1);
 
-        //右
-        quickSort2(arr,index+1,right);
-    }
-    public static int partition2(int arr[],int left,int right){
-        int temp = arr[left];
-        while (left < right){
-            while (arr[right] >= temp && right > left){
-                right--;
-            }
-            arr[left] = arr[right];
-            while (arr[left] <= temp && right > left){
-                left++;
-            }
-            arr[right] = arr[left];
-        }
-        arr[right] = temp;
-        return right;
-    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     /**
      * 一次快速排序
@@ -76,13 +96,13 @@ public class QuickSort {
         //排序前半部分
         quickSort(array, left, index - 1);
         //排序后半部分
-        quickSort(array,index+1,right);
+         quickSort(array,index+1,right);
     }
 
     public static void main(String[] args) {
-        int[] arr = {6,1,2,7,9,3,4,5,10,8};
+        int[] arr = {1,4,2,7,9,8,3,6,0,-1};
 
-        quickSort2(arr, 0, arr.length-1);
+        quickSort(arr, 0, arr.length-1);
 
         for(int i:arr){
             System.out.print(i+",");

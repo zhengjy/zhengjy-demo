@@ -1,4 +1,4 @@
-package com.zhengjy.offer;
+package com.zhengjy.offer.sort;
 
 import java.util.Arrays;
 
@@ -12,25 +12,22 @@ public class 希尔排序 {
         arr[a] = arr[b];
         arr[b] = av;
     }
-    public static void test(int[] arr){
-        for (int gap=arr.length/2;gap>0;gap = gap/2){
+
+
+    private static void test(int arr[]){
+        for (int gap = arr.length/2;gap>0;gap = gap/2){
             for (int i=gap;i<arr.length;i++){
-                int j = i;
-                while (j-gap >= 0 && arr[j] < arr[j-gap]){
+                int j=i;
+                while (j-gap >=0 && arr[j] < arr[j-gap]){
                     swap2(arr,j,j-gap);
-                    j= j-gap;
+                    j = j-gap;
                 }
             }
         }
     }
 
     public static void main(String []args){
-        int []arr ={1,4,2,7,9,8,3,6};
-        sort(arr);
-        System.out.println(Arrays.toString(arr));
-        int []arr1 ={1,4,2,7,9,8,3,6};
-//        sort1(arr1);
-//        System.out.println(Arrays.toString(arr1));
+        int[] arr1 = new int[]{1,4,2,7,9,8,3,6,0,-1};
         test(arr1);
         System.out.println(Arrays.toString(arr1));
     }

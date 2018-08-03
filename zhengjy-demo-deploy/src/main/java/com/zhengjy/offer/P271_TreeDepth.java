@@ -1,7 +1,6 @@
 package com.zhengjy.offer;
 
-import java.util.LinkedList;
-import java.util.Queue;
+import com.zhengjy.offer.tree.TreeNode;
 
 /**
  * Created by zhengjy on 2018/4/6 9:15

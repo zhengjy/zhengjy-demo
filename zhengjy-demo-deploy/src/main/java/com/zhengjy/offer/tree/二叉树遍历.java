@@ -1,4 +1,4 @@
-package com.zhengjy.offer;
+package com.zhengjy.offer.tree;
 
 import java.util.LinkedList;
 import java.util.Queue;

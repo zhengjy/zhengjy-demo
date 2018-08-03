@@ -1,4 +1,4 @@
-package com.zhengjy.offer;
+package com.zhengjy.offer.tree;
 
 /**
  * Created by zhengjy on 2018/4/5 17:07

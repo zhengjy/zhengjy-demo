@@ -1,7 +1,7 @@
 package com.zhengjy.offer;
 
 
-import java.util.Stack;
+import com.zhengjy.offer.tree.TreeNode;
 
 /**
  * Created by zhengjy on 2018/4/5 17:04
@@ -9,7 +9,7 @@ import java.util.Stack;
  * 二叉搜索树的第k大节点
  */
 public class P269_KthNodeInBST2 {
-    public static TreeNode<Integer> kthNode(TreeNode<Integer> root,int k){
+    public static TreeNode<Integer> kthNode(TreeNode<Integer> root, int k){
         //栈顶元素保证一直是cur的父节点
         if(root==null || k<0){
             return null;
