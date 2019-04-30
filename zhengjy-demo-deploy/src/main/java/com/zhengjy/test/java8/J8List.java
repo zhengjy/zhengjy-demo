@@ -1,6 +1,9 @@
 package com.zhengjy.test.java8;
 
 import java.util.*;
+import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.groupingBy;
 
 /**
  * Created by zhengjy on 2017/7/17.
@@ -172,6 +175,49 @@ public class J8List {
         example.useStreamCount();
         example.useStreamReduce();
         example.useParallelStreams();
+
+        listToMap();
+
+
     }
+
+    private static Map<String,List<User>> listToMap(){
+        List<User> list = new ArrayList<>(Arrays.asList(
+                new User("x1","20"),
+                new User("x1","30"),
+                new User("x2","201"),
+                new User("x2","202"),
+                new User("x2","203")));
+
+        Map<String,List<User>> m = list.stream().collect(groupingBy(User::getName));
+
+        m.forEach((k,v) ->{
+            System.out.println(k);
+            System.out.println(v);
+        });
+
+        return m;
+    }
+
+    static class User{
+        private String name;
+
+        private String age;
+
+        public User(String name, String age) {
+            this.name = name;
+            this.age = age;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public String getAge() {
+            return age;
+        }
+    }
+
+
 
 }

@@ -6,6 +6,18 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
          http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd" ><!-- 启用spring mvc 注解 -->
 
+
+    <bean id="smsListener" class="com.zhengjy.businessevent.SendSmsListener" />
+    <bean id="ringListener" class="com.zhengjy.businessevent.ColorRingListener" />
+    <bean id="event" class="com.zhengjy.businessevent.BusinessEventNotify">
+        <property name="businessListenerList">
+            <list>
+                <value>DealColorRing</value>
+                <value>DealSms</value>
+            </list>
+        </property>
+    </bean>
+
     <bean  class="com.zhengjy.spring.aware.TestAware" id="testAware" />
 
     <bean  class="com.zhengjy.spring.User2" id="user2" >
@@ -22,6 +34,7 @@
     </bean>
 
     <import resource="spring-tag-test.xml"/>
+    <import resource="rpc-invoke-config.xml"/>
     <!--<import resource="spring-dubbo.xml"/>-->
     <bean id="fooBar" name="x1,x2,x3"  class="com.zhengjy.spring.news.FooBar">
         <meta key="keys" value="values"/>

@@ -1,56 +1,64 @@
 
-/*
 package com.zhengjy.test.java8;
 
 
-import java.io.File;
 import java.util.Arrays;
 import java.util.List;
-
-*/
-/**
- * Created by zhengjy on 2017/3/3.
- *//*
+import java.util.Optional;
+import java.util.Properties;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 public class Test {
-*/
-/*
 
     public static void main(String[] args) {
-        */
-/*String separator = ",";
-        Arrays.asList( "a", "b", "d" ).forEach(
-                ( String e ) -> System.out.print( e + separator ) );
+        String ss = "Hello";
+
+        String[] aa = ss.split("");
+
+        String[] bb = {"H", "e", "l", "l", "o"};
 
 
-        Arrays.asList( "a", "b", "d" ).sort( ( e1, e2 ) -> {
-            int result = e1.compareTo( e2 );
-            return result;
-        } );
+        String[] strings = {"Hello", "World"};
 
-        final Car car = Car.create( Car::new );
-        final List< Car > cars = Arrays.asList( car );*//*
+        //Arrays.stream接收一个数组返回一个流
+        List<Stream<String>> streamList = Arrays.asList(strings).stream().
+                map(str -> str.split("")).
+                map(str -> Arrays.stream(str)).
+                collect(Collectors.toList());
+
+        Arrays.asList(strings).stream().map(str -> str.split("")).flatMap(str -> Arrays.stream(str)).
+                collect(Collectors.toList());
+
+    }
 
 
-    public static class Car {
-        */
-/*public static Car create( final Supplier< Car > supplier ) {
-            return supplier.get();
+    public int readDuration(Properties props, String name) {
+        String value = props.getProperty(name);
+        if (value != null) {
+            try {
+                int i = Integer.parseInt(value);
+                if (i > 0) {
+                    return i;
+                }
+            } catch (NumberFormatException nfe) { }
         }
-
-        public static void collide( final Car car ) {
-            System.out.println( "Collided " + car.toString() );
-        }
-
-        public void follow( final Car another ) {
-            System.out.println( "Following the " + another.toString() );
-        }
-
-        public void repair() {
-            System.out.println( "Repaired " + this.toString() );
-        }*//*
+        return 0;
+    }
+    public int readDuration2(Properties props, String name) {
+        int i = Optional.ofNullable(props.getProperty(name)).map(Test::stringToInt).filter(v -> v >0 ).orElse(0);
+        int i2 = Optional.ofNullable(props.getProperty(name)).flatMap(Test::stringToInt2).filter(v -> v >0 ).orElse(0);
+        return 0;
+    }
 
 
+    private static int stringToInt(String value){
+        return Optional.ofNullable(value).map(v -> Integer.parseInt(value)).orElse(0);
+
+    }
+    private static Optional<Integer> stringToInt2(String value){
+        return Optional.ofNullable(Integer.parseInt(value));
+
+    }
 }
-*/

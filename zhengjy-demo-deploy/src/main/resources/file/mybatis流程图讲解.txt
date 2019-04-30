@@ -1,0 +1,146 @@
+1)获取Configuration.xml配置文件，使用DOM方式解析。
+2)在Configuration.xml配置文件中查找<configuration>节点，并开始解析。(列出常用的几个节点，只详细介绍如何解析<mappers>节点)
+ 2.1)解析<properties>节点
+	<properties>
+        <property name="driver" value="com.mysql.jdbc.Driver"/>
+        <property name="username" value="healthcare"/>
+    </properties>
+ 2.2)解析<settings>节点，＜settings＞节点下的配置是MyBatis全局性的配置，它们会改变MyBatis的运行时行为，
+	<settings >
+        <setting name="cacheEnabled" value="true"/>
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+	</settings>
+ 2.3)解析<typeAliases>节点，<typeAliases>类的别名配置
+	<typeAliases>
+        <typeAlias type="com.test.UserParam" alias="UserParam"/>
+	</typeAliases>
+ 2.4)解析<plugins>节点，mybatis的插件扩展，用户可通过添加自定义的插件在sql执行过程中某一点进行拦截，只需实现Interceptor接口。
+	<plugins >
+        <plugin interceptor="com.test.demo.SqlStatementInterceptor" />
+	</plugins>
+ 2.5)解析<typeHandlers>节点，配置某些字段特殊处理器，如数据字段“interest”，存储到数据库是字符串值为"a,b,c"，从数据库读取处理转换java类型为List
+	//在Configuration.xml文件配置
+	<typeHandlers>
+        <typeHandler handler="com.test.demo.MyListTypeHandler"/>
+	</typeHandlers>
+	//在mapper文件使用
+	<resultMap id="interestMap" type="com.test.User">
+        <result typeHandler="com.test.demo.MyListTypeHandler" column="interest" javaType="java.util.List"
+                jdbcType="VARCHAR"
+                property="interest"/>
+        <result column="id" jdbcType="VARCHAR" property="id"/>
+    </resultMap>
+ 2.6)解析<mappers>节点，解析sql映射配置文件
+	<mappers>
+        <mapper resource="mybatis/UserMapper.xml"/>
+	</mappers>
+  2.6.1)获取sql映射配置文件 InputStream inputStream = Resources.getResourceAsStream(resource)
+  2.6.2)创建XMLMapperBudlder对象 XMLMapperBuilder mapperParser = new XMLMapperBuilder(inputStream, configuration, resource, configuration.getSqlFragments());
+  2.6.3)解析映射配置文件 mapperParser.parse();
+   2.6.3.1)解析mybatis/UserMapper.xml文件下mapper文件 
+		configurationElement(parser.evalNode("/mapper"));
+	2.6.3.1.1)解析<resultMap>节点
+		<resultMap id="dateMap" type="com.test.User">
+			<result  column="reg_time" property="regTime"/>
+		</resultMap>
+	2.6.3.1.2)解析<sql>节点 sqlElement(context.evalNodes("/mapper/sql"));
+		<sql id="field">
+		   'a' username, 1 id,
+		</sql>
+	2.6.3.1.3)解析<select>节点 buildStatementFromContext(context.evalNodes("select|insert|update|delete"));
+	 2.6.3.1.3.1)创建XMLStatementBuilder并解析
+		XMLStatementBuilder statementParser = new XMLStatementBuilder(configuration, builderAssistant, context, requiredDatabaseId);
+		statementParser.parseStatementNode();
+	  2.6.3.1.3.1.1)解析SQL节点 statementParser.parseStatementNode();
+	   2.6.3.1.3.1.1.1) 获取sql节点id  String id = context.getStringAttribute("id");
+	   2.6.3.1.3.1.1.2) 解析参数类型  Class<?> parameterTypeClass = resolveClass(parameterType);
+	   2.6.3.1.3.1.1.3) 在解析SQL 语句之前，先处理其中的<include>节点，将<include>标签从dom节点移除，返回标签中sql语句  
+									new XMLIncludeTransformer(configuration, builderAssistant).applyIncludes(context.getNode());
+			<sql id="field">
+			   'a' username, 1 id,
+			</sql>
+			<include refid="field"/>
+	   2.6.3.1.3.1.1.4) 处理<selectKey> 节点  
+						processSelectKeyNodes(id, parameterTypeClass, langDriver);
+	   2.6.3.1.3.1.1.5) 解析SQL,生成SqlSource。 
+						SqlSource sqlSource = langDriver.createSqlSource(configuration, context, parameterTypeClass);
+			1)创建XMLScriptBuilder对象。 
+						XMLScriptBuilder builder = new XMLScriptBuilder(configuration, script, parameterType);
+			2)调用XMLScriptBuilder.parseScriptNode()方法创建SqlSource对象。  
+						builder.parseScriptNode();
+			 2.1)会遍历<select>下的每个节点，如果包含任何标签节点， 则认为是动态SQL 语句： 如果文本节点中含有“$｛｝”占位符，也认为其为
+					动态SQL 语句。返回生成的SqlNode 集合  
+						MixedSqlNode rootSqlNode = parseDynamicTags(context);
+			 2.2)  RawSqlSource 静态sql处理，最终都会统一生成BoundSql 对象，其中封装了完整的SQL 语句（可能包含“？”占位符）、参数映射关系（ parameterMappings 集合）
+					以及用户传入的参数（ additionalParameters集合）
+						SqlSource sqlSource = new RawSqlSource(configuration, rootSqlNode, parameterType);
+			  2.2.1) 完成SQL 语句的拼装和初步解析  
+						String sql = getSql(configuration, rootSqlNode);
+			  2.2.2) 创建SqlSourceBuilder进一步解析。SqlSourceBuilder 主要完成了两方面的操作，一方面是解析SQL 语句中的“#{}"占位符中定义的属性
+						另一方面是将SQL 语句中的”占位符替换成"?"占位符。 
+							SqlSourceBuilder sqlSourceParser = new SqlSourceBuilder(configuration);
+			  2.2.3)解析sql，返回SqlSource对象  this.sqlSource = sqlSourceParser.parse(sql, clazz, new HashMap<String, Object>());
+			    2.2.3.1)创建ParameterMappingTokenHandler对象，它是解析"#{}"占位符中的参数属性以及替换占位符的核心
+							ParameterMappingTokenHandler handler = new ParameterMappingTokenHandler(configuration, parameterType, additionalParameters);
+				2.2.3.2)创建GenericTokenParse，使用GenericTokenParse与ParameterMappingTokenHandler 配合解析"#{}"占位符
+							GenericTokenParser parser = new GenericTokenParser("#{", "}", handler);
+				2.2.3.3)解析sql将#替换?，及将每个参数生成ParameterMapping
+							String sql = parser.parse(originalSql);
+				  2.2.3.3.1)
+							int start = text.indexOf(openToken=#{, 0);
+							int end = text.indexOf(closeToken=}, offset);
+							builder.append(handler.handleToken(expression.toString()));
+				    2.2.3.3.1.1)  解析参数属性，并将解析得到的ParameterMapping 对象添加到parameterMappings 集合中
+							parameterMappings.add(buildParameterMapping(content));
+							return "?";
+					  2.2.3.3.1.1.1)
+							ParameterMapping.Builder builder = new ParameterMapping.Builder(configuration, property, propertyType);
+							return builder.build();
+				2.2.3.4)创建StaticSqlSource ，其中封装了占位符被替换成"?"的SQL语句以及参数对应的ParameterMapping集合
+							return new StaticSqlSource(configuration, sql, handler.getParameterMappings());
+							
+			 2.3)DynamicSqlSource，动态sql处理 SqlSource sqlSource = new DynamicSqlSource(configuration, rootSqlNode);
+	   2.6.3.1.3.1.1.6) 构建 MappedStatement 对象，并将该对象存储到Configuration 的 mappedStatements 集合中
+							builderAssistant.addMappedStatement(id, sqlSource,......)
+		2.6.3.1.3.1.1.6.1)
+							MappedStatement statement = statementBuilder.build()
+		2.6.3.1.3.1.1.6.2)
+							configuration.addMappedStatement(statement)
+   2.6.3.2)bindMapperForNamespace();
+	2.6.3.2.1)获取映射文件的命名空间
+							String namespace = builderAssistant.getCurrentNamespace();
+	
+	2.6.3.2.2)根据命名空间解析 mapper 类型
+							Class<?>  boundType = Resources.classForName(namespace);
+	2.6.3.2.3)绑定 mapper 类,注册到configuration中
+							configuration.addMapper(boundType);
+	  2.6.3.2.3.1)
+		mapperRegistry.addMapper(type)
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	

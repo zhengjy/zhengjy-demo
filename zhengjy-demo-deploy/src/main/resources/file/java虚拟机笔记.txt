@@ -134,6 +134,11 @@ java对象GC收回：
 		这就意味着，在正常的处理过程中，G1完成了堆的压缩（至少是部分堆的压缩），这样也就不会有cms内存碎片问题的存在了。。
 		G1垃圾回收会优先选择第一块垃圾最多的区域。
 		
+		G1收集器将堆内存划分为一系列大小相等的Region区域，Region大小在1MB到32MB在启动时确定，G1同样也使用分代收集策略，将堆分为Eden, Survivior, Old等，
+		只不过是按照逻辑划分的，每个Region逻辑上属于一个分代区域，并且在物理上不连续，当一个Old的Region收集完成后会变成新可用Region并可能成为下一个Eden Region。
+		当申请的对象大于Region大小的一半时，会被放入一个Humongous Region(巨型区域)中。当一个Region中是空的时，称为可用Region或新Region。
+
+		
 		RS(Remember Set)：RS被用来记录从其他Region指向一个Region的指针情况。因此，一个Region就会有一个RS。这种记录可以带来一个极大的好处：
 							在回收一个Region的时候不需要执行全堆扫描，只需要检查它的RS就可以找到外部引用。
 		每个 Region 都有一个关联的 Remembered Set（简称RS），RS 的数据结构是 Hash 表，里面的数据是 
