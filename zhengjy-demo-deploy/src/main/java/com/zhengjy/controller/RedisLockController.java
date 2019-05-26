@@ -26,15 +26,15 @@ public class RedisLockController {
         Boolean locked = false;
         try {
             locked = lock.distributedLock(key, uuid, secondsToLock);
-            if(locked) {
-                log.info("userId:{} is locked - uuid:{}", userId, uuid);
-                log.info("do business logic");
-                TimeUnit.MICROSECONDS.sleep(3000);
-            } else {
-                log.info("userId:{} is not locked - uuid:{}", userId, uuid);
-            }
+//            if(locked) {
+//                log.info("userId:{} is locked - uuid:{}", userId, uuid);
+//                log.info("do business logic");
+//                TimeUnit.MICROSECONDS.sleep(3000);
+//            } else {
+//                log.info("userId:{} is not locked - uuid:{}", userId, uuid);
+//            }
         } catch (Exception e) {
-            log.error("error", e);
+//            log.error("error", e);
         } finally {
             if(locked) {
                 lock.distributedUnlock(key, uuid);
