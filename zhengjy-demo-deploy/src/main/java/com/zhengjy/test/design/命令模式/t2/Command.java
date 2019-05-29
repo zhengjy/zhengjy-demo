@@ -7,5 +7,13 @@ package com.zhengjy.test.design.命令模式.t2;
  */
 public interface Command {
 
+    /**
+     * 执行开关等命令
+     */
     void  execute();
+
+    /**
+     * 撤销，不管execute执行了什么，undo都会倒转过来
+     */
+    void undo();
 }

@@ -12,7 +12,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
 
 
-@Configuration
 @SpringBootApplication
 @ImportResource("classpath*:spring/spring-config.xml")
 //@ConfigurationProperties(locations = {"classpath:config/test.properties"},prefix = "test.")

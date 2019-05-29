@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd"
+       default-autowire="byName">
+
+    <!-- 提供方应用信息，用于计算依赖关系 -->
+    <dubbo:application name="advert-center"/>
+
+    <!-- 使用multicast广播注册中心暴露服务地址 -->
+    <dubbo:registry address="${advert-center.dubbo.registry.address}"/>
+
+    <!-- 用dubbo协议在20880端口暴露服务 -->
+    <dubbo:protocol name="dubbo" port="${advert-center.dubbo.protocol.port}" />
+
+    <!--<dubbo:consumer loadbalance="randomWithWarmUp" check="false"/>-->
+
+    <!--<dubbo:monitor protocol="registry"/>-->
+
+    <dubbo:provider threads="1000" timeout="3000" version="1.0"   cluster="failfast" retries="0"/>
+
+</beans>
+

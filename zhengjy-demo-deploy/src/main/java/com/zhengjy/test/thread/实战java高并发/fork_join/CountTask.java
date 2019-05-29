@@ -45,7 +45,7 @@ public class CountTask extends RecursiveTask<Long> {
                 pos += step+1;
                 subTasks.add(subTask);
                 //创建子进程处理，使系统可以多一个执行分支
-                subTask.fork();
+                subTask.fork();invokeAll();
             }
             //等所有子任务结束，在进行一次求和
             for (CountTask t : subTasks){
