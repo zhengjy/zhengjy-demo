@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 import java.util.Collections;
 
 @Slf4j
-@Component
+//@Component
 public class DistributedLock {
 
     //注意RedisTemplate用的String,String，后续所有用到的key和value都是String的

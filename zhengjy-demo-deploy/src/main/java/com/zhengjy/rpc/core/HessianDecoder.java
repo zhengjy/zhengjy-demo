@@ -2,7 +2,6 @@ package com.zhengjy.rpc.core;
 
 import com.alibaba.rocketmq.common.message.MessageDecoder;
 import com.caucho.hessian.io.Hessian2Input;
-import com.google.common.io.Closer;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;

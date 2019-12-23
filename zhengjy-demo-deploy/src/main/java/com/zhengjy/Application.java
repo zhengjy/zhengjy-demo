@@ -13,7 +13,7 @@ import org.springframework.context.annotation.ImportResource;
 
 
 @SpringBootApplication
-@ImportResource("classpath*:spring/spring-config.xml")
+@ImportResource("classpath*:spring/spring-*.xml")
 //@ConfigurationProperties(locations = {"classpath:config/test.properties"},prefix = "test.")
 
 public class Application {//extends SpringBootServletInitializer

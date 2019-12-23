@@ -17,7 +17,7 @@ import java.util.Collections;
  * @Date 2019-01-17
  */
 @Slf4j
-@Component
+//@Component
 public class DistributedLimit {
 
     //注意RedisTemplate用的String,String，后续所有用到的key和value都是String的

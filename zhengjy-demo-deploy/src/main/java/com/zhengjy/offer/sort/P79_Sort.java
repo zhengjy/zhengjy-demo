@@ -45,7 +45,7 @@ public class P79_Sort {
 
 
     public static void testQuickSort(){
-        int[] data = {5,4,3,1,2};
+        int[] data = {1,4,2,7,9,8,3,6,0,-1};
         quickSort(data);
         System.out.print("数组快速排序：\t");
         for(int item: data){
@@ -86,7 +86,7 @@ public class P79_Sort {
 
     public static void main(String[] args){
         testQuickSort();
-        testBubbleSort();
+//        testBubbleSort();
     }
 
 

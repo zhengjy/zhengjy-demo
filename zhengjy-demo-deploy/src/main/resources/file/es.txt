@@ -35,7 +35,7 @@ Lucene:
 				4)多语言词干还原过滤器
 
 elasticSearch
-		关系数据库     ⇒ 数据库 ⇒ 表    ⇒ 行    ⇒ 列(Columns)
+		关系数据库     ⇒ 数据库 	   ⇒ 表    	 	 ⇒ 行    		   ⇒ 列(Columns)
 
 		Elasticsearch  ⇒ 索引(Index)   ⇒ 类型(type)  ⇒ 文档(Docments)  ⇒ 字段(Fields)  
 		

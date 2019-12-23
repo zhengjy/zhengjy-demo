@@ -1,5 +1,6 @@
 package com.zhengjy.businessevent;
 
+
 import com.google.common.collect.Lists;
 
 import java.util.HashMap;

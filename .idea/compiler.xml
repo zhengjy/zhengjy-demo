@@ -12,12 +12,5 @@
         <module name="zhengjy-demo-deploy" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel target="1.8">
-      <module name="zhengjy-demo" target="1.7" />
-      <module name="zhengjy-demo-api" target="1.7" />
-      <module name="zhengjy-demo-biz" target="1.7" />
-      <module name="zhengjy-demo-common" target="1.7" />
-      <module name="zhengjy-demo-deploy" target="1.8" />
-    </bytecodeTargetLevel>
   </component>
 </project>

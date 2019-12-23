@@ -49,36 +49,36 @@ public class MessageRecvExecutor implements ApplicationContextAware,Initializing
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        //netty的线程池模型设置成主从线程池模式
-        ThreadFactory threadRpcFactory = new NamedThreadFactory("NettyRPC ThreadFactory");
-        //方法返回到Java虚拟机的可用的处理器数量
-        int parallel = Runtime.getRuntime().availableProcessors() * 2;
-
-        EventLoopGroup boss = new NioEventLoopGroup();
-        EventLoopGroup worker = new NioEventLoopGroup(parallel,threadRpcFactory,SelectorProvider.provider());
-
-        try {
-            ServerBootstrap bootstrap = new ServerBootstrap();
-            bootstrap.group(boss,worker).channel(NioServerSocketChannel.class)
-                    .childHandler(new MessageRecvChannelInitializer(handlerMap))
-                    .option(ChannelOption.SO_BACKLOG, 128)
-                    .childOption(ChannelOption.SO_KEEPALIVE, true);
-            String[] ipAddr = serverAddress.split(MessageRecvExecutor.DELIMITER);
-
-            if (ipAddr.length == 2) {
-                String host = ipAddr[0];
-                int port = Integer.parseInt(ipAddr[1]);
-                ChannelFuture future = bootstrap.bind(host, port).sync();
-                System.out.printf("[author tangjie] Netty RPC Server start success ip:%s port:%d\n", host, port);
-                future.channel().closeFuture().sync();
-            } else {
-                System.out.printf("[author tangjie] Netty RPC Server start fail!\n");
-            }
-
-        }catch (Exception e){
-            worker.shutdownGracefully();
-            boss.shutdownGracefully();
-        }
+//        //netty的线程池模型设置成主从线程池模式
+//        ThreadFactory threadRpcFactory = new NamedThreadFactory("NettyRPC ThreadFactory");
+//        //方法返回到Java虚拟机的可用的处理器数量
+//        int parallel = Runtime.getRuntime().availableProcessors() * 2;
+//
+//        EventLoopGroup boss = new NioEventLoopGroup();
+//        EventLoopGroup worker = new NioEventLoopGroup();
+//
+//        try {
+//            ServerBootstrap bootstrap = new ServerBootstrap();
+//            bootstrap.group(boss,worker).channel(NioServerSocketChannel.class)
+//                    .childHandler(new MessageRecvChannelInitializer(handlerMap))
+//                    .option(ChannelOption.SO_BACKLOG, 128)
+//                    .childOption(ChannelOption.SO_KEEPALIVE, true);
+//            String[] ipAddr = serverAddress.split(MessageRecvExecutor.DELIMITER);
+//
+//            if (ipAddr.length == 2) {
+//                String host = ipAddr[0];
+//                int port = Integer.parseInt(ipAddr[1]);
+//                ChannelFuture future = bootstrap.bind(host, port).sync();
+//                System.out.printf("[author tangjie] Netty RPC Server start success ip:%s port:%d\n", host, port);
+//                future.channel().closeFuture().sync();
+//            } else {
+//                System.out.printf("[author tangjie] Netty RPC Server start fail!\n");
+//            }
+//
+//        }catch (Exception e){
+//            worker.shutdownGracefully();
+//            boss.shutdownGracefully();
+//        }
 
     }
 

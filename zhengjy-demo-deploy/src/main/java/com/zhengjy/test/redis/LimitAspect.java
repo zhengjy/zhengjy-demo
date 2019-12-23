@@ -19,9 +19,9 @@ import java.lang.reflect.Method;
  * @Date 2019-01-17
  */
 @Slf4j
-@Aspect
-@Component
-@EnableAspectJAutoProxy(proxyTargetClass = true)
+//@Aspect
+//@Component
+//@EnableAspectJAutoProxy(proxyTargetClass = true)
 public class LimitAspect {
 
     @Autowired

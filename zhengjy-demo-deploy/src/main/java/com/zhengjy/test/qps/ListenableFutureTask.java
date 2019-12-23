@@ -1,6 +1,8 @@
 package com.zhengjy.test.qps;
 
 import com.google.common.util.concurrent.*;
+import org.apache.http.concurrent.FutureCallback;
+import org.springframework.util.concurrent.ListenableFuture;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;

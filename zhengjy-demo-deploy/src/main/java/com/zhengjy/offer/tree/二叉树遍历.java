@@ -17,7 +17,6 @@ import java.util.Stack;
  /
 0
 
-
  */
 public class 二叉树遍历 {
     /*
@@ -31,6 +30,17 @@ public class 二叉树遍历 {
     7)取出栈中底部3节点且从栈中删除3节点,取出3对应的右节点4作为根节点(5)
 
     8)将4放入栈中且将对应的左节点作为根节点(5,4)
+
+
+            5
+       /   \
+      3     7
+     / \   / \
+    2  4  6   8
+   /
+  1
+ /
+0
      */
     //前序、中序遍历非递归的方式
      public static void preOrderNonRecursive(TreeNode<Integer> root){

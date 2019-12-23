@@ -20,13 +20,13 @@ import java.io.PrintWriter;
 
 @ControllerAdvice
 public class ControllerAdviceTest {
-
-    @ModelAttribute("user")
-    public UserVO newUser(UserVO user) {
-        user.setName("xxxxx");
-        System.out.println("============应用到所有@RequestMapping注解方法，在其执行之前把返回值放入Model");
-        return user;
-    }
+//
+//    @ModelAttribute("user")
+//    public UserVO newUser(UserVO user) {
+//        user.setName("xxxxx");
+//        System.out.println("============应用到所有@RequestMapping注解方法，在其执行之前把返回值放入Model");
+//        return user;
+//    }
 
     @InitBinder
     public void initBinder(WebDataBinder binder) {

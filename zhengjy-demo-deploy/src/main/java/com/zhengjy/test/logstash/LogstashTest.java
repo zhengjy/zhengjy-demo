@@ -1,4 +1,4 @@
-package com.zhengjy;
+package com.zhengjy.test.logstash;
 
 import org.slf4j.LoggerFactory;
 

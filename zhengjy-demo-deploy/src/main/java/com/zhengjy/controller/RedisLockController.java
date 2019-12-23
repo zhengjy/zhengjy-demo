@@ -12,8 +12,8 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by Jiyang.Zheng on 2019/1/28 9:45.
  */
-@RestController
-@RequestMapping("/lock")
+//@RestController
+//@RequestMapping("/lock")
 @Log4j2
 public class RedisLockController {
     @Autowired

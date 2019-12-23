@@ -13,6 +13,15 @@
     <name>zhengjy-demo-deploy</name>
     <version>1.0-SNAPSHOT</version>
     <dependencies>
+
+        <!-- https://mvnrepository.com/artifact/org.roaringbitmap/RoaringBitmap -->
+        <dependency>
+            <groupId>org.roaringbitmap</groupId>
+            <artifactId>RoaringBitmap</artifactId>
+            <version>0.7.14</version>
+        </dependency>
+
+
         <dependency>
             <groupId>com.zhengjy</groupId>
             <artifactId>zhengjy-demo-biz</artifactId>
@@ -61,11 +70,6 @@
             <version>1.16.18</version>
         </dependency>
 
-        <dependency>
-            <groupId>com.hooke</groupId>
-            <artifactId>trace4j-core</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
 
 
         <!--<dependency>-->
@@ -84,6 +88,12 @@
             <artifactId>jsonevent-layout</artifactId>
             <version>1.6</version>
         </dependency>
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-all</artifactId>
+            <version>5.0.0.Alpha2</version>
+        </dependency>
+
 
     </dependencies>
 
